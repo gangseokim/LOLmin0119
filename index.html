@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>롤 챔피언 가이드</title>
+<style>
+  :root{--bg:#0a1428;--panel:#0f1f3d;--panel2:#142a52;--gold:#c8aa6e;--text:#e8e6df;--mute:#9aa7bd;--blue:#0ac8b9;--red:#e84057}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Malgun Gothic",system-ui,sans-serif;line-height:1.6}
+  header{padding:24px 16px 12px;text-align:center;border-bottom:1px solid #2a3a5e}
+  h1{margin:0;color:var(--gold);letter-spacing:1px;font-size:1.8rem}
+  header p{margin:4px 0 0;color:var(--mute);font-size:.9rem}
+  .wrap{max-width:1100px;margin:0 auto;padding:16px}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  input[type=search]{flex:1;min-width:200px;padding:10px 14px;border-radius:8px;border:1px solid #2a3a5e;background:var(--panel);color:var(--text);font-size:1rem}
+  .chip{padding:8px 14px;border-radius:20px;border:1px solid #2a3a5e;background:var(--panel);color:var(--text);cursor:pointer;font-size:.9rem}
+  .chip.on{background:var(--gold);color:#1a1a1a;border-color:var(--gold);font-weight:bold}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .grp{margin-bottom:8px}
+  .grp h2{color:var(--gold);font-size:1.15rem;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid #2a3a5e}
+  .grp h2 small{color:var(--mute);font-weight:normal;font-size:.85rem;margin-left:6px}
+  .card{background:var(--panel);border:1px solid #2a3a5e;border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:.15s}
+  .card:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .avatar{position:relative;overflow:hidden;width:88px;height:88px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:bold;color:#fff;border:2px solid var(--gold)}
+  .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%}
+  .card b{display:block}
+  .card small{color:var(--mute)}
+  .empty{color:var(--mute);text-align:center;padding:40px}
+  /* detail */
+  #detail{display:none}
+  .back{background:none;border:1px solid var(--gold);color:var(--gold);padding:6px 14px;border-radius:6px;cursor:pointer;margin-bottom:12px}
+  .head{display:flex;gap:16px;align-items:center;margin-bottom:16px}
+  .head .avatar{width:110px;height:110px;font-size:2.4rem;margin:0;flex:0 0 110px}
+  .head h2{margin:0;color:var(--gold)}
+  .tag{display:inline-block;padding:2px 10px;border-radius:12px;background:var(--panel2);font-size:.8rem;margin:4px 4px 0 0;color:var(--blue)}
+  section{background:var(--panel);border:1px solid #2a3a5e;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  section h3{margin:0 0 10px;color:var(--gold);font-size:1.05rem}
+  .skill{display:flex;gap:12px;padding:8px 0;border-top:1px solid #1d2f55}
+  .skill:first-of-type{border-top:0}
+  .key{flex:0 0 34px;height:34px;border-radius:6px;background:var(--panel2);border:1px solid var(--gold);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:bold}
+  .skill b{color:var(--text)}
+  .skill p{margin:2px 0 0;color:var(--mute);font-size:.92rem}
+  .combo{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}
+  .combo span.k{background:var(--panel2);border:1px solid var(--gold);color:var(--gold);padding:2px 10px;border-radius:6px;font-weight:bold}
+  .combo i{color:var(--mute);font-style:normal}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:700px){.two{grid-template-columns:1fr}}
+  .cn{display:inline-block;margin:3px 4px 3px 0;padding:4px 12px;border-radius:14px;cursor:pointer;font-size:.9rem;border:1px solid}
+  .weak .cn{color:var(--red);border-color:var(--red)}
+  .strong .cn{color:var(--blue);border-color:var(--blue)}
+  ul{margin:0;padding-left:20px;color:var(--mute)}
+  .reason{color:var(--mute);font-size:.88rem;margin:6px 0 0}
+
+  /* 탭 + 바텀 듀오 */
+  .tabs{display:flex;justify-content:center;gap:8px;margin-top:12px}
+  .tab{padding:8px 20px;border-radius:20px;border:1px solid var(--gold);background:none;color:var(--gold);cursor:pointer;font-size:.95rem}
+  .tab.on{background:var(--gold);color:#1a1a1a;font-weight:bold}
+  .duo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  .duo{background:var(--panel);border:1px solid #2a3a5e;border-radius:10px;padding:14px 16px}
+  .duo h3{margin:0 0 6px;font-size:1.1rem;color:var(--text)}
+  .duo h3 a{color:var(--gold);cursor:pointer;text-decoration:underline dotted}
+  .duo h3 span{color:var(--mute);margin:0 6px}
+  .ttag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.78rem;margin-bottom:8px;font-weight:bold}
+  .t-올인{background:#5a1f2a;color:#ff8a9a}.t-포킹{background:#1f4a5a;color:#7fe0f0}.t-보호{background:#2a4a2a;color:#9be09b}.t-전용{background:#4a3a1a;color:#ffd27a}
+  .duo dl{margin:0}.duo dt{color:var(--gold);font-size:.85rem;margin-top:8px}.duo dd{margin:2px 0 0;color:var(--mute);font-size:.92rem}
+  .duo ul{margin:2px 0 0;padding-left:18px}
+  .sit{background:var(--panel);border:1px solid #2a3a5e;border-left:4px solid var(--gold);border-radius:8px;padding:12px 16px;margin-bottom:10px}
+  .sit b{color:var(--text)}.sit p{margin:4px 0 6px;color:var(--mute);font-size:.92rem}
+  .pick{display:inline-block;margin:2px 4px 2px 0;padding:3px 12px;border-radius:14px;background:var(--panel2);color:var(--blue);font-size:.88rem}
+  h2.sec{color:var(--gold);margin:22px 0 10px;font-size:1.2rem}
+
+  /* 시기별 강함 */
+  .power-svg{width:100%;max-width:520px;height:auto;display:block}
+  .pbadge{display:inline-block;padding:3px 12px;border-radius:12px;font-weight:bold;font-size:.85rem;margin-bottom:8px}
+  .pb-초반{background:#5a1f2a;color:#ff8a9a}.pb-후반{background:#1f4a5a;color:#7fe0f0}.pb-고른{background:#2a4a2a;color:#9be09b}
+  .prow{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:.9rem}
+  .prow .lb{flex:0 0 38px;color:var(--gold);font-weight:bold}
+  .pips{display:flex;gap:4px}
+  .pip{width:30px;height:10px;border-radius:3px;background:#1d2f55}
+  .pip.on{background:var(--blue)}
+  .prow .nm{color:var(--mute);font-size:.82rem}
+  .mini-wrap{margin-top:6px}
+  .ml,.mini{display:flex;justify-content:center;gap:6px}
+  .ml span{width:16px;text-align:center;font-size:.68rem;font-weight:bold;color:var(--mute)}
+  .ml span:nth-child(1){color:#ff8a9a}.ml span:nth-child(2){color:var(--blue)}.ml span:nth-child(3){color:var(--gold)}
+  .mini{align-items:flex-end;height:22px}
+  .mini i{display:block;width:16px;border-radius:2px 2px 0 0;background:var(--blue);opacity:.85}
+  .bline{margin-top:6px;font-size:.72rem;color:#ffb36b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .burst{border-color:#8a4a2a;background:linear-gradient(180deg,#2a1a1a 0,var(--panel) 60%)}
+  .burst h3{color:#ffb36b}
+  .bsteps{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0}
+  .bsteps .k{background:#3a1f14;border:1px solid #ff8a4a;color:#ffd0a8;padding:4px 12px;border-radius:6px;font-weight:bold}
+  .bsteps .k.aa{background:#1d2f55;border-color:#6b7fa8;color:#cdd8ee;font-weight:normal}
+  .bsteps i{color:var(--mute);font-style:normal}
+  .bsteps .n{width:20px;height:20px;border-radius:50%;background:#ff8a4a;color:#1a1a1a;font-size:.72rem;font-weight:bold;display:inline-flex;align-items:center;justify-content:center;margin-right:-2px}
+  .mini i:nth-child(1){background:#ff8a9a}.mini i:nth-child(3){background:var(--gold)}
+  .plegend{color:var(--mute);font-size:.8rem;margin:8px 0 0}
+
+  .syn .duo{background:var(--panel2)}
+  .syn .duo-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .ehelp{color:var(--mute);font-size:.9rem;margin:0 0 10px}
+  .egroup{margin-bottom:14px}
+  .egroup h3{margin:0 0 8px;color:var(--text);font-size:1rem}
+  .eopts{display:flex;flex-wrap:wrap;gap:8px}
+  .eopt{padding:8px 14px;border-radius:10px;border:1px solid #2a3a5e;background:var(--panel);color:var(--text);cursor:pointer;text-align:left;font-size:.9rem}
+  .eopt small{display:block;color:var(--mute);font-size:.75rem;margin-top:2px}
+  .eopt.on{border-color:var(--gold);background:var(--panel2);box-shadow:0 0 0 1px var(--gold) inset}
+  .res{background:var(--panel);border:1px solid #2a3a5e;border-radius:10px;padding:12px 16px;margin-bottom:10px}
+  .res.good{border-left:4px solid var(--blue)}.res.bad{border-left:4px solid var(--red)}
+  .res h4{margin:0 0 4px;font-size:1.05rem}
+  .res h4 a{color:var(--gold);cursor:pointer;text-decoration:underline dotted}
+  .rb{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.78rem;font-weight:bold;margin-left:8px}
+  .rb.s{background:#1f4a5a;color:#7fe0f0}.rb.m{background:#2a4a2a;color:#9be09b}.rb.x{background:#5a1f2a;color:#ff8a9a}
+  .res ul{margin:4px 0 0;padding-left:18px;color:var(--mute);font-size:.9rem}
+  .res li b{color:var(--gold)}
+  .res .plan{margin:6px 0 0;color:var(--mute);font-size:.88rem}
+
+  .pt{display:inline-block;margin-top:4px;padding:1px 8px;border-radius:10px;font-size:.68rem;font-weight:bold}
+  .pt.buff{background:#1f4a2a;color:#8be09b}.pt.nerf{background:#5a1f2a;color:#ff8a9a}.pt.adj{background:#4a3a1a;color:#ffd27a}.pt.fix{background:#2a3550;color:#9fb4de}
+  .prow2{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid #1d2f55;font-size:.92rem}
+  .prow2:first-of-type{border-top:0}
+  .prow2 .pv{flex:0 0 52px;color:var(--gold);font-weight:bold}
+  .prow2 p{margin:0;color:var(--mute)}
+  .pbase{background:var(--panel);border:1px solid #2a3a5e;border-left:4px solid var(--gold);border-radius:8px;padding:10px 16px;margin-bottom:14px;color:var(--mute);font-size:.9rem}
+  .pbase b{color:var(--gold)}
+
+  .avd{background:var(--panel);border:1px solid #2a3a5e;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  .avd h3{margin:0 0 4px;color:var(--gold);font-size:1.05rem}
+  .avd .sub{color:var(--mute);font-size:.82rem;margin:0 0 8px}
+  .avi{border-left:4px solid var(--red);background:var(--panel2);border-radius:8px;padding:8px 12px;margin-bottom:8px}
+  .avi b{color:#ff8a9a}
+  .avi .tp{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:10px;background:#1d2f55;color:var(--mute);font-size:.72rem}
+  .avi p{margin:3px 0 0;color:var(--mute);font-size:.9rem}
+  .avi .vs{margin-top:4px;font-size:.85rem;color:var(--blue)}
+
+  .stags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+  .stag{padding:1px 8px;border-radius:10px;background:#1d2f55;color:#9fb4de;font-size:.72rem}
+  .stag.cc{background:#4a1f2a;color:#ff9aa8;font-weight:bold}
+  .skill p{line-height:1.55}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚔ 롤 챔피언 가이드</h1>
+  <p>스킬 설명 · 콤보 · 시너지 바텀 듀오 · 상대 조합 대응 · 최근 패치</p>
+  <div class="tabs">
+    <button class="tab on" data-t="list">챔피언</button>
+    <button class="tab" data-t="duo">상대 조합 대응</button>
+    <button class="tab" data-t="patch">최근 패치</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="list">
+    <div class="controls">
+      <input type="search" id="q" placeholder="챔피언 이름 검색 (예: 아리, Ahri)">
+      <div id="roles" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+    <div id="grid"></div>
+  </div>
+  <div id="detail"></div>
+  <div id="duo" style="display:none"></div>
+  <div id="patch" style="display:none"></div>
+</div>
+
+<script>
+/* ===== 챔피언 데이터 =====
+   새 챔피언을 추가하려면 아래 배열에 같은 형식으로 객체를 하나 더 넣으면 됩니다.
+   (스킬 이름·수치는 패치로 바뀔 수 있으니 최신 패치 노트를 함께 확인하세요.) */
+const CHAMPIONS = [
+/* ================= 원딜 ================= */
+{
+  id:"jinx", name:"징크스", en:"Jinx", title:"난폭한 말괄량이", role:"원딜", diff:"보통", color:"#4ab3d9",
+  desc:"킬/어시스트 후 폭발적으로 강해지는 후반형 원거리 딜러. 글로벌 궁극기로 전투를 마무리합니다.",
+  skills:[
+    ["P","흥분 상태!","적 챔피언/구조물 처치 보조 시 이동·공격 속도가 크게 증가합니다."],
+    ["Q","변환!","미니건(공속 증가)과 로켓 런처(범위 피해·사거리 증가)를 전환합니다."],
+    ["W","잽!","전기 탄환을 발사해 피해를 주고 적을 둔화시킵니다."],
+    ["E","씹어먹는 폭죽!","폭죽을 설치해 밟은 적을 잠시 속박합니다."],
+    ["R","초강력 슈퍼 메가 죽음의 로켓!","전 맵 사거리의 로켓. 대상의 잃은 체력에 비례해 피해량이 증가합니다."]
+  ],
+  combos:[["E","W","Q","평타"],["W","E","평타","R"]],
+  comboNote:"덫과 둔화로 붙지 못하게 하고, 킬 후 '흥분 상태'를 이용해 연속 처치하세요.",
+  weak:["제드","레오나","블리츠크랭크","카직스"], strong:["탐 켄치","잔나","룰루"],
+  reason:"이동기가 없고 체력이 약해 암살자/강한 인게이지에 취약하지만, 보호해주는 서포터와는 시너지가 좋습니다.",
+  tips:["초반 라인전은 안전하게, 한타 순서를 잘 조절","대형 오브젝트 전 로켓 궁으로 마무리","E는 벽 쪽에서 적에게 설치"]
+},
+{
+  id:"ashe", name:"애쉬", en:"Ashe", title:"얼음 화살", role:"원딜", diff:"쉬움", color:"#6ec4e8",
+  desc:"둔화와 글로벌 스턴으로 맵 전체를 지배하는 원거리 딜러. 시야와 CC 연계에 강합니다.",
+  skills:[
+    ["P","냉기 화살","평타로 적을 둔화시키고, 크리티컬 시 추가 피해를 줍니다."],
+    ["Q","집중 사격","공격 속도가 증가하고 평타가 연속 화살을 발사합니다."],
+    ["W","일제 사격","부채꼴로 화살을 발사해 피해와 둔화를 줍니다."],
+    ["E","매의 눈","맵 위 지정 지점을 정찰하며 시야를 제공합니다."],
+    ["R","마법의 수정 화살","글로벌 사거리로 첫 챔피언을 기절시키고 피해를 줍니다."]
+  ],
+  combos:[["W","Q","평타"],["R","W","Q","평타"]],
+  comboNote:"궁극기로 기절시키고 W/Q로 딜을 이어가세요.",
+  weak:["드레이븐","루시안","레오나","파이크"], strong:["케이틀린","미스 포츈","카이사"],
+  reason:"적의 인게이지/암살형 챔피언에게 약하며 초반 라인전에서 공격적인 원딜에게 밀릴 수 있습니다.",
+  tips:["궁극기는 미니맵을 보고 갱 지원 + 이니시","E로 정글 시야 확보","슬로우 덕분에 카이팅이 쉽다"]
+},
+{
+  id:"ezreal", name:"이즈리얼", en:"Ezreal", title:"탐험가", role:"원딜", diff:"보통", color:"#e0b84a",
+  desc:"안정적인 원거리 포킹과 순간이동 회피로 생존하는 마법 원딜입니다.",
+  skills:[
+    ["P","상승하는 주문력","스킬 적중 시 공격 속도가 오릅니다."],
+    ["Q","신비한 화살","직선 투사체. 적중 시 모든 스킬 쿨타임이 감소합니다."],
+    ["W","정수 흐름","표식을 남기고 평타/스킬로 터뜨려 추가 피해를 줍니다."],
+    ["E","비전 이동","짧게 순간이동하며 근처 적에게 마법 피해를 줍니다."],
+    ["R","정조준 일격","맵 전체로 날아가는 대형 화살."]
+  ],
+  combos:[["W","Q","E","Q"],["R","W","Q"]],
+  comboNote:"W 표식을 먼저 걸고 Q로 터뜨리면 쿨타임이 크게 줄어듭니다.",
+  weak:["제드","카사딘","피즈","블리츠크랭크"], strong:["케이틀린","시비르","베인"],
+  reason:"기동성으로 암살자 하나는 회피하지만, 강한 CC나 연속 돌진에는 불리합니다.",
+  tips:["Q 적중이 곧 실력","E는 항상 도주용으로 남기기","후반엔 포킹과 궁극기 활용"]
+},
+{
+  id:"caitlyn", name:"케이틀린", en:"Caitlyn", title:"필트오버의 보안관", role:"원딜", diff:"보통", color:"#5a8fc7",
+  desc:"기본 공격 사거리가 길어 라인전 압박에 강한 원딜. 덫과 그물로 상대를 묶고 헤드샷을 노립니다.",
+  skills:[
+    ["P","헤드샷","일정 횟수마다 평타가 추가 피해를 주며, 덫/그물에 걸린 적에게도 헤드샷이 적용됩니다."],
+    ["Q","필트오버 피스메이커","긴 사거리의 관통 사격을 합니다."],
+    ["W","요들 덫","덫을 설치해 밟은 적을 잠시 속박합니다."],
+    ["E","90구경 그물","그물을 쏘아 적을 둔화시키고 반대 방향으로 물러납니다."],
+    ["R","탄환 세례","집중해서 멀리 있는 챔피언에게 강력한 저격을 합니다."]
+  ],
+  combos:[["W","E","Q"],["E","W","평타(헤드샷)"]],
+  comboNote:"덫 위에서 그물을 쏘면 덫에 걸리게 하는 '그물-덫 콤보'로 헤드샷을 노릴 수 있습니다.",
+  weak:["드레이븐","루시안","레오나","노틸러스"], strong:["징크스","애쉬","베인"],
+  reason:"사거리가 짧은 원딜에게는 강하지만, 인게이지/돌진형 조합에게는 접근을 허용하면 약합니다.",
+  tips:["덫으로 라인 앞 시야 관리","레벨 2 전후 공격적으로 푸시","궁극기는 시전 중 차단당하기 쉬우니 안전할 때만"]
+},
+{
+  id:"vayne", name:"베인", en:"Vayne", title:"밤사냥꾼", role:"원딜", diff:"어려움", color:"#6b5ca5",
+  desc:"후반에 탱커까지 녹이는 고성장 원딜. 구르기와 응징으로 위치 싸움에 능한 챔피언입니다.",
+  skills:[
+    ["P","밤사냥꾼","적 챔피언에게 다가갈 때 이동 속도가 증가합니다."],
+    ["Q","구르기","짧게 구르며 다음 평타에 추가 피해를 줍니다."],
+    ["W","은빛 화살","같은 적에게 3번째 공격 시 최대 체력 비례 고정 피해를 줍니다."],
+    ["E","단죄","적을 밀쳐내 벽에 부딪히면 기절시킵니다."],
+    ["R","최후의 시간","잠시 공격력이 증가하고 Q 사용 시 은신합니다."]
+  ],
+  combos:[["Q","평타","평타(W 3스택)","E"],["R","Q","평타","W","E"]],
+  comboNote:"벽 근처에서 E로 상대를 묶고, W 3스택 폭딜을 맞추는 연계가 핵심입니다.",
+  weak:["케이틀린","드레이븐","루시안","레오나"], strong:["다리우스","가렌","말파이트"],
+  reason:"초반에는 약해서 사거리가 긴 원딜과 공격적인 서포터에게 압박당하지만, 탱커 상대로는 매우 강합니다.",
+  tips:["초반은 파밍과 생존 위주","벽 위치를 보고 포지셔닝","궁극기 은신으로 이니시를 피하거나 역습"]
+},
+{
+  id:"missfortune", name:"미스 포츈", en:"Miss Fortune", title:"현상금 사냥꾼", role:"원딜", diff:"쉬움", color:"#d45a5a",
+  desc:"라인전이 강하고 궁극기 한타가 강력한 원딜. 조작이 쉬워 입문자에게도 좋습니다.",
+  skills:[
+    ["P","사랑의 매","새로운 대상을 공격하면 추가 피해를 줍니다."],
+    ["Q","더블 업","적에게 사격하고 뒤의 적에게도 튕깁니다."],
+    ["W","허세","비전투 시 이동 속도가 증가하고, 사용하면 공격 속도가 증가합니다."],
+    ["E","총알 세례","지정 지역에 탄환을 쏟아 둔화시킵니다."],
+    ["R","총알 시간","원뿔 모양으로 연속 사격을 퍼붓습니다."]
+  ],
+  combos:[["E","Q","평타","R"],["W","평타","Q"]],
+  comboNote:"E로 둔화시켜 이동을 막은 뒤, 모인 곳에 궁극기를 사용하세요.",
+  weak:["드레이븐","케이틀린","레오나","노틸러스"], strong:["징크스","애쉬","카이사"],
+  reason:"이동기가 없고 시전 중 움직일 수 없어 CC에 취약합니다. 아군의 보호가 중요합니다.",
+  tips:["Q 튕김을 이용해 미니언 뒤 적 견제","궁극기는 아군 CC 이후에","W로 이동 속도 보너스 활용"]
+},
+{
+  id:"kaisa", name:"카이사", en:"Kai'Sa", title:"공허의 딸", role:"원딜", diff:"보통", color:"#8a4fc0",
+  desc:"스킬을 강화하며 성장하는 원딜. 평타와 스킬을 섞어 폭딜을 넣는 암살형 원딜입니다.",
+  skills:[
+    ["P","두 번째 피부","평타로 플라즈마 중첩을 쌓아 폭발 피해를 줍니다. 아이템으로 스킬이 진화합니다."],
+    ["Q","이카시아 비","주변 적에게 미사일을 발사합니다."],
+    ["W","공허의 추적자","긴 사거리 광선으로 플라즈마를 적용합니다."],
+    ["E","과충전","잠시 이동/공격 속도가 증가합니다."],
+    ["R","살육 본능","표식이 있는 아군/적 주변으로 도약하고 보호막을 얻습니다."]
+  ],
+  combos:[["W","평타","Q"],["R","평타","W","Q","E"]],
+  comboNote:"W로 플라즈마를 쌓고 평타로 터뜨린 뒤 Q로 마무리하면 딜 효율이 좋습니다.",
+  weak:["레오나","노틸러스","블리츠크랭크","잔나"], strong:["징크스","애쉬","미스 포츈"],
+  reason:"체력이 낮아 CC에 취약하며, 궁극기 사용 위치가 노출됩니다.",
+  tips:["진화 타이밍에 맞춰 공격적으로 교전","궁극기는 안전한 위치로 돌진하는 용도","후반 딜링 순서를 잘 정하기"]
+},
+{
+  id:"jhin", name:"진", en:"Jhin", title:"예술가", role:"원딜", diff:"보통", color:"#b0396a",
+  desc:"4번째 탄환이 필살 일격이 되는 리듬형 원딜. 포킹과 CC 연계가 좋습니다.",
+  skills:[
+    ["P","속삭임","4번째 공격은 반드시 치명타이며 대상의 잃은 체력에 비례해 피해가 증가합니다."],
+    ["Q","춤추는 수류탄","수류탄을 던져 최대 4번 튕기며 피해를 줍니다."],
+    ["W","죽음의 꽃","긴 사거리 저격. 표식 맞은 적은 속박됩니다."],
+    ["E","관객 모집","설치된 덫이 밟으면 폭발하고 둔화시킵니다."],
+    ["R","커튼콜","멀리 있는 지역을 향해 4번 저격합니다."]
+  ],
+  combos:[["E","W","Q","평타(4번째)"],["R","W","평타"]],
+  comboNote:"덫으로 시야 확보 + 둔화, 아군 CC 후 W 속박으로 연계하세요.",
+  weak:["드레이븐","루시안","레오나","노틸러스"], strong:["징크스","베인","애쉬"],
+  reason:"이동기가 없고 재장전이 있어 인게이지에 취약합니다. 서포터와 함께 호흡이 중요합니다.",
+  tips:["재장전 타이밍 때 교전 피하기","궁극기는 한타 후반 마무리용","시야를 넓히며 포킹"]
+},
+{
+  id:"lucian", name:"루시안", en:"Lucian", title:"성스러운 처형자", role:"원딜", diff:"어려움", color:"#c9a24a",
+  desc:"스킬 사용 후 두 번 사격하는 근접형 원딜. 라인전과 중반 교전에서 강합니다.",
+  skills:[
+    ["P","빛의 총잡이","스킬 사용 후 다음 평타가 2연발로 나갑니다."],
+    ["Q","꿰뚫는 빛","직선으로 적을 관통하는 공격을 합니다."],
+    ["W","불타는 열정","표식 남기고 적중 시 이동 속도 증가."],
+    ["E","끈질긴 추격","짧게 돌진해 위치를 조절합니다."],
+    ["R","단죄","일정 시간 동안 쌍권총을 난사합니다."]
+  ],
+  combos:[["E","평타","Q","평타","W","평타"],["W","E","평타","Q","평타"]],
+  comboNote:"스킬 하나 쓰고 평타 2연발을 번갈아 넣는 '스킬-평타-스킬' 패턴이 기본입니다.",
+  weak:["케이틀린","징크스","노틸러스","알리스타"], strong:["애쉬","베인","이즈리얼"],
+  reason:"사거리가 짧고, 후반 지속 딜에서는 다른 원딜에게 밀립니다. 라인전 이후 힘이 줄어듭니다.",
+  tips:["초반 라인 주도권 잡고 눈덩이","E 돌진을 아끼지 않기","궁극기 사거리와 방향 신경쓰기"]
+},
+{
+  id:"draven", name:"드레이븐", en:"Draven", title:"영광스러운 처형자", role:"원딜", diff:"어려움", color:"#c1473a",
+  desc:"도끼를 받아내며 폭딜을 넣는 초반 강세 원딜. 연승하면 눈덩이가 커집니다.",
+  skills:[
+    ["P","드레이븐의 리그","도끼를 받아 '명성'을 쌓고 골드를 획득합니다."],
+    ["Q","회전 도끼","다음 평타에 추가 피해를 주고 도끼를 던져 받으면 재사용됩니다."],
+    ["W","피의 질주","이동 속도와 공격 속도가 증가합니다."],
+    ["E","비켜라!","적을 밀치며 이동합니다."],
+    ["R","죽음의 회전","전 맵 사거리의 도끼를 던집니다."]
+  ],
+  combos:[["E","Q","Q","W","평타"],["R","E","Q"]],
+  comboNote:"도끼를 계속 받아 Q 2중첩을 유지하고, 교전 직전에 W와 E를 사용하세요.",
+  weak:["케이틀린","징크스","노틸러스","알리스타"], strong:["애쉬","미스 포츈","베인"],
+  reason:"초반 폭발력이 강하지만, 도끼를 못 잡으면 약하고, 후반 지속 딜은 보통입니다.",
+  tips:["초반 승부로 눈덩이 만들기","도끼 낙하 위치 예측","궁극기는 도주 중인 적 끝마무리"]
+},
+{
+  id:"xayah", name:"자야", en:"Xayah", title:"반란군", role:"원딜", diff:"보통", color:"#b65fc7",
+  desc:"깃털을 뿌려 한꺼번에 회수하며 적을 속박하는 원딜. 라칸과 환상의 호흡을 보입니다.",
+  skills:[
+    ["P","깔끔한 일격","평타가 관통하며 깃털을 남깁니다."],
+    ["Q","쌍칼","두 개의 단검을 던져 깃털을 남깁니다."],
+    ["W","치명적인 깃털","공격 속도와 이동 속도가 증가합니다."],
+    ["E","칼날 부르기","땅에 꽂힌 깃털을 불러 적을 베고 속박합니다."],
+    ["R","깃털 폭풍","잠시 대상 지정 불가 상태가 되며 깃털을 뿌립니다."]
+  ],
+  combos:[["Q","평타(깃털)","E"],["W","Q","E"]],
+  comboNote:"깃털을 많이 남긴 뒤 E로 한꺼번에 불러 적을 속박하세요.",
+  weak:["노틸러스","알리스타","레오나","블리츠크랭크"], strong:["미스 포츈","베인","애쉬"],
+  reason:"라칸이 짝일 때 가장 강합니다. 이동기가 부족해 인게이지에 취약합니다.",
+  tips:["깃털 배치 위치 고려","라칸 이동 타이밍에 합류","궁극기는 도주/이니시 둘 다 가능"]
+},
+{
+  id:"samira", name:"사미라", en:"Samira", title:"사막의 장미", role:"원딜", diff:"어려움", color:"#d05a8c",
+  desc:"스타일 등급을 쌓아 폭딜을 넣는 근접형 원딜. 돌진과 투사체 방어로 교전에 뛰어듭니다.",
+  skills:[
+    ["P","저돌적인 충동","적에게 이동해 접근하면 평타가 추가 피해를 줍니다."],
+    ["Q","재주","사격하거나 근접 베기를 합니다."],
+    ["W","칼날 선풍","주변 투사체를 막으며 피해를 줍니다."],
+    ["E","야생의 질주","적/미니언을 통과하며 돌진합니다."],
+    ["R","불타는 방아쇠","S등급일 때 사용 가능한 광역 연속 사격."]
+  ],
+  combos:[["E","Q","W","평타"],["E","평타","Q","W","R"]],
+  comboNote:"스킬 연속 사용으로 S등급을 달성하고 궁극기를 터뜨리는 것이 핵심입니다.",
+  weak:["노틸러스","알리스타","레오나","블리츠크랭크"], strong:["애쉬","징크스","베인"],
+  reason:"CC에 걸리면 위험하지만, W로 투사체를 막고 파고드는 한타가 강합니다.",
+  tips:["서포터가 이니시를 걸 때 같이 진입","W로 적 스킬 방어","궁극기 전 S등급 달성 연습"]
+},
+{
+  id:"yunara", name:"유나라", en:"Yunara", title:"신규 원거리 딜러", role:"원딜", diff:"보통", color:"#e6a8d0",
+  desc:"치명타와 마법 추가 피해를 섞어 싸우는 신규 원딜. 궁극기 '초월' 상태에서 스킬이 강화되어 기동성과 딜이 크게 오릅니다. (스킬명은 영문 공식명)",
+  skills:[
+    ["P","Vow of the First Lands","치명타 시 마법 추가 피해(AP 계수)를 줍니다."],
+    ["Q","Cultivation of Spirit","평타에 마법 추가 피해가 붙고 공격할수록 '해방' 중첩이 쌓입니다. 최대가 되면 발동해 공격 속도·추가 피해가 오르고 평타가 주변 적에게 퍼집니다."],
+    ["W","Arc of Judgment","회전하는 염주를 던져 적을 둔화시키고 피해를 줍니다. 초월 상태에서는 Arc of Ruin(둔화 광선)으로 바뀝니다."],
+    ["E","Kanmei's Steps","잠시 유체화하며 이동 속도가 크게 증가합니다(적 챔피언 쪽으로 향할 때 더 강함). 초월 상태에서는 Untouchable Shadow(돌진)로 바뀝니다."],
+    ["R","Transcend One's Self","일정 시간 '초월' 상태가 되어 기본 스킬이 강화됩니다."]
+  ],
+  combos:[["W","평타","Q"],["R","E","W","Q","평타"]],
+  comboNote:"Q 해방 중첩을 최대로 쌓아 발동하고, 초월 상태(R)에서 W 광선·E 돌진으로 딜을 이어갑니다.",
+  weak:["레오나","노틸러스","블리츠크랭크"], strong:["(데이터 부족)"],
+  reason:"체력과 방어가 낮아 인게이지에 취약합니다. 신규 챔피언이라 상성 데이터는 참고용입니다.",
+  tips:["Q 중첩을 유지하려면 공격을 끊지 않기","초월 상태 지속 시간에 맞춰 교전 시작","룰루·밀리오 같은 보호형 서포터와 궁합이 좋다고 평가됨"]
+},
+/* ================= 미드 ================= */
+{
+  id:"azir", name:"아지르", en:"Azir", title:"모래 황제", role:"미드", diff:"어려움", color:"#d1a63a",
+  desc:"모래 병사를 조종하는 고난이도 마법사. 라인 푸시와 한타 CC에 강합니다.",
+  skills:[
+    ["P","슈리마의 유산","패시브로, 정확한 조건은 인게임 툴팁에서 확인하세요."],
+    ["Q","정복자의 모래","모래 병사들이 지정 위치로 이동하며 피해를 줍니다."],
+    ["W","솟아라!","모래 병사를 소환하고, 평타가 병사를 통해 나갑니다."],
+    ["E","모래 이동","병사에게 순간 이동해 적을 베며 이동합니다."],
+    ["R","황제의 분할","벽을 소환해 적을 뒤로 밀어냅니다."]
+  ],
+  combos:[["W","E","Q","R"],["W","W","Q","R"]],
+  comboNote:"'셔플'은 병사를 소환하고 E로 이동한 뒤 Q로 병사를 보내는 연계입니다.",
+  weak:["제드","카사딘","피즈","아칼리"], strong:["빅토르","오리아나","말자하"],
+  reason:"초반 약한 편이며 기동성 있는 암살자에게 취약합니다. 후반에 강력해집니다.",
+  tips:["초반엔 라인 관리 우선","궁극기는 한타 포지션 정리용","병사 위치 조절이 핵심"]
+},
+{
+  id:"aurora", name:"오로라", en:"Aurora", title:"두 세계 사이의 마녀", role:"미드", diff:"어려움", color:"#7fb6e8",
+  desc:"영혼 세계를 넘나드는 기동형 폭딜 마법사(미드/탑). 표식 3중첩 폭발과 은신 도약으로 적을 쓰러뜨립니다. (스킬명은 영문 공식명)",
+  skills:[
+    ["P","Spirit Abjuration","평타와 스킬로 적에게 표식을 쌓고, 3중첩이 되면 소모되어 추가 마법 피해를 줍니다. 챔피언을 처치하면 영혼이 풀려나 체력을 서서히 회복합니다."],
+    ["Q","Twofold Hex","저주 볼트를 날려 적에게 표식을 남기고, 재시전하면 저주를 되돌려 경로상의 적에게 피해를 줍니다."],
+    ["W","Across the Veil","영혼 포털로 도약해 잠깐 은신하며 이동 속도가 증가합니다. 챔피언 처치 시 쿨타임이 초기화됩니다."],
+    ["E","The Weirding","직선으로 에너지를 쏘아 피해와 둔화를 주고, 오로라는 뒤로 밀려납니다."],
+    ["R","Between Worlds","앞으로 도약하며 충격파로 피해와 둔화를 주고, 영혼 세계로 이어지는 균열을 남겨 그 사이를 돌진할 수 있습니다."]
+  ],
+  combos:[["Q","E","평타","Q(재시전)","R"],["E","W","평타","Q"]],
+  comboNote:"표식 3중첩을 빠르게 쌓아 터뜨리는 것이 핵심입니다. W는 처치 시 쿨타임이 초기화되니 연속 처치를 노리세요.",
+  weak:["제드","피즈","카사딘"], strong:["오리아나","빅토르"],
+  reason:"체력이 낮아 CC와 암살자를 조심해야 합니다. 상성은 참고용입니다.",
+  tips:["표식 중첩 타이밍 맞추기","W 은신 도약으로 교전 진입/탈출","26.19 패치에서 E 피해와 궁극기 균열 지속이 상향됨"]
+},
+{
+  id:"taliyah", name:"탈리야", en:"Taliyah", title:"돌 직조자", role:"미드", diff:"보통", color:"#b88a4a",
+  desc:"돌과 땅을 다루는 마법사. 긴 사거리 견제와 밀쳐내기로 라인전이 강력합니다.",
+  skills:[
+    ["P","돌 서핑","이동 속도가 증가하며, 땅 위를 지날 때 더 빠르게 이동합니다."],
+    ["Q","실타래 연발","돌을 연속 발사합니다. 가공된 땅 위에서는 추가 피해."],
+    ["W","지진 밀치기","지정 위치에 땅을 흔들어 적을 공중으로 띄우거나 밀쳐냅니다."],
+    ["E","풀려난 대지","전방에 지면 효과를 만들어 둔화시키고 폭발하게 합니다."],
+    ["R","직조자의 벽","맵 어디든 길게 벽을 세웁니다."]
+  ],
+  combos:[["Q","E","W","Q"],["W","E","Q"]],
+  comboNote:"W 띄우기를 예측해서 E로 연결하고 Q를 쏟아붓는 연계가 기본입니다.",
+  weak:["제드","피즈","카사딘","아칼리"], strong:["오리아나","빅토르","말자하"],
+  reason:"기동성이 있는 암살자에게 약하고, 정확한 스킬샷이 필요해 숙련도가 요구됩니다.",
+  tips:["벽 궁극기로 갱킹/도주 지원","W 예측 사격이 핵심","정글 가까운 쪽 전투 시 강력"]
+},
+/* ================= 정글 ================= */
+{
+  id:"chogath", name:"초가스", en:"Cho'Gath", title:"공허의 공포", role:"정글", diff:"쉬움", color:"#7a3fa0",
+  desc:"처치할수록 몸집이 커지는 탱커형 정글러. 궁극기로 적을 처형하며 성장합니다.",
+  skills:[
+    ["P","육식","적 처치 시 체력과 마나를 회복합니다."],
+    ["Q","균열","지정 위치에 땅을 솟아오르게 해 공중에 띄웁니다."],
+    ["W","야수의 비명","원뿔 범위에 침묵을 겁니다."],
+    ["E","날카로운 가시","공격 시 가시가 추가 피해를 줍니다."],
+    ["R","포식","대상을 처형하고 사용할 때마다 크기와 체력이 증가합니다."]
+  ],
+  combos:[["Q","W","R"],["Q","평타","W","R"]],
+  comboNote:"Q 띄우기 후 W로 침묵시키고 R로 처형 — 오브젝트 스틸에도 R이 유용합니다.",
+  weak:["엘리스","리 신","니달리","카밀"], strong:["다리우스","가렌","말파이트"],
+  reason:"초반 갱킹 압박에 약하며, 기동성 있는 정글러에게 역갱킹당할 수 있습니다.",
+  tips:["스택 쌓기로 중후반 폭발","R은 용/바론 스틸 가능","Q는 예측 사격"]
+},
+{
+  id:"nocturne", name:"녹턴", en:"Nocturne", title:"영원한 악몽", role:"정글", diff:"보통", color:"#2f4a8a",
+  desc:"궁극기로 맵 전체를 이동하며 적을 암살하는 정글러. 스킬 보호막으로 CC를 막습니다.",
+  skills:[
+    ["P","그림자 칼날","주기적으로 평타가 주변 적에게 광역 피해를 줍니다."],
+    ["Q","땅거미 일격","그림자 길을 남기는 투사체를 던집니다."],
+    ["W","어둠의 장막","스킬 보호막을 얻고 공격 속도가 증가합니다."],
+    ["E","끔찍한 공포","적에게 공포를 걸어 도망치게 합니다."],
+    ["R","편집증","전 맵 시야를 가리고 대상 챔피언에게 돌진해 베어냅니다."]
+  ],
+  combos:[["R","E","Q","평타"],["Q","E","평타","W"]],
+  comboNote:"E 공포로 이동을 막고 평타 연타로 폭딜. 상대 CC는 W로 막아낼 수 있습니다.",
+  weak:["엘리스","리 신","니달리","자르반 4세"], strong:["카서스","마스터 이","그레이브즈"],
+  reason:"초반 강하지만, 단단한 탱커와 강한 CC가 있는 조합에서는 힘들 수 있습니다.",
+  tips:["W로 상대 CC 스킬을 반드시 막기","R로 로밍/갱킹 중 맵 전체 활용","상대 시야 없이 궁극기 접근"]
+},
+{
+  id:"sejuani", name:"세주아니", en:"Sejuani", title:"북부의 분노", role:"정글", diff:"보통", color:"#4a8fb8",
+  desc:"단단하고 CC가 풍부한 탱커 정글러. 이니시에이팅으로 한타를 여는 역할을 합니다.",
+  skills:[
+    ["P","서리 갑옷","방어력과 마법 저항력을 얻으며 적 주변에 둔화를 남깁니다."],
+    ["Q","북극의 돌진","돌진해 적을 공중에 띄웁니다."],
+    ["W","겨울의 분노","철퇴를 휘둘러 주변 적을 베고 되돌아옵니다."],
+    ["E","영구동토","서리 중첩을 쌓아 가득 차면 기절 시킵니다."],
+    ["R","얼음 감옥","긴 사거리 투사체로 적을 기절시킵니다."]
+  ],
+  combos:[["Q","W","E","R"],["R","Q","W","E"]],
+  comboNote:"이니시 후 서리를 쌓고 기절을 거는 순서가 핵심입니다.",
+  weak:["엘리스","리 신","니달리","카밀"], strong:["레나타 글라스크","제리","징크스"],
+  reason:"기동성과 카이팅이 좋은 상대에게는 접근이 힘들고, 초반 갱킹에 약합니다.",
+  tips:["Q로 이니시 걸기","R은 후방 딜러에게","서리 중첩 관리"]
+},
+{
+  id:"maokai", name:"마오카이", en:"Maokai", title:"뒤틀린 나무정령", role:"정글", diff:"쉬움", color:"#4a8a4a",
+  desc:"단단한 탱커이자 CC 머신. 주문을 쓸수록 회복하며 팀의 앞라인을 맡습니다.",
+  skills:[
+    ["P","수액 마법","스킬 사용 후 다음 평타가 회복을 줍니다."],
+    ["Q","가시 부수기","적을 밀쳐내는 충격파를 발사합니다."],
+    ["W","뒤틀린 전진","대상에게 돌진해 속박합니다."],
+    ["E","묘목 투척","묘목을 던져 적 근처에서 폭발합니다."],
+    ["R","자연의 손아귀","전방으로 덩굴 벽을 보내 적을 둔화시킵니다."]
+  ],
+  combos:[["W","Q","E","R"],["E","W","Q"]],
+  comboNote:"W로 붙어 속박 후 Q로 밀치고, 묘목으로 지속 피해를 줍니다.",
+  weak:["엘리스","리 신","니달리","렉사이"], strong:["제리","징크스","애쉬"],
+  reason:"초반 갱킹 압박이 약하며, 후반에 딜러 보호와 CC 연계로 가치가 올라갑니다.",
+  tips:["덤불 묘목으로 시야 장악","궁극기는 후방 포킹 상대에게 효과적","이니시/방어 둘 다 가능"]
+},
+/* ================= 서포터 ================= */
+{
+  id:"seraphine", name:"세라핀", en:"Seraphine", title:"별빛 가수", role:"서포터", diff:"쉬움", color:"#e87fb0",
+  desc:"원딜처럼 라인을 지배하는 마법사형 서포터. 방어막, 회복, 광역 매혹을 한 번에 제공합니다.",
+  skills:[
+    ["P","무대 장악력","3번째 스킬마다 추가 음표(공격)가 발사됩니다."],
+    ["Q","하이 노트","광역 폭발로 피해를 줍니다."],
+    ["W","서라운드 사운드","주변 아군에게 보호막과 회복을 줍니다."],
+    ["E","비트 드롭","둔화/속박을 거는 음파를 쏩니다."],
+    ["R","앙코르","매혹을 걸고 아군/적을 통과할수록 사거리가 늘어납니다."]
+  ],
+  combos:[["E","Q","W"],["R","E","Q","W"]],
+  comboNote:"궁극기를 아군/적 챔피언에게 맞추며 사거리를 늘리면 광역 매혹으로 한타를 뒤집습니다.",
+  weak:["제드","탈론","모르가나","블리츠크랭크"], strong:["레나타 글라스크","소나","룰루"],
+  reason:"기동성이 부족해 암살/인게이지에 취약하지만, 라인전 포킹은 강력합니다.",
+  tips:["스킬 3번 후 평타 강화 활용","원딜과 같이 서서 W 보호막","궁극기 경로 설계"]
+},
+{
+  id:"rakan", name:"라칸", en:"Rakan", title:"매혹적인 자", role:"서포터", diff:"보통", color:"#e0603a",
+  desc:"빠르게 돌진해 이니시를 걸고 아군을 보호하는 서포터. 자야와 쌍둥이 같은 호흡이 있습니다.",
+  skills:[
+    ["P","요정 깃털","일정 시간마다 방어막을 얻으며 이동 시 쿨타임 감소."],
+    ["Q","빛나는 깃펜","적에게 투사체를 던지고 맞추면 아군을 회복합니다."],
+    ["W","화려한 등장","범위 내 적을 공중에 띄웁니다."],
+    ["E","전투 춤","아군에게 돌진해 방어막을 줍니다."],
+    ["R","빠름","매혹을 걸어 적을 홀립니다. 이동 속도 증가와 함께 사용 가능."]
+  ],
+  combos:[["E","W","R"],["R","W","Q"]],
+  comboNote:"아군에게 E로 이동 후 W 띄우기를 바로 연계합니다. 궁극기로 매혹을 걸어 진입합니다.",
+  weak:["모르가나","알리스타","브라움","잔나"], strong:["애쉬","미스 포츈","카이사"],
+  reason:"기동 서포터이므로 CC 단단한 서포터에게 약하고, 자야와 함께 있을 때 최고의 시너지를 냅니다.",
+  tips:["E 아군 이동으로 위치 변경","W로 후방 딜러 끊기","원딜 시야 확보"]
+},
+{
+  id:"alistar", name:"알리스타", en:"Alistar", title:"미노타우로스", role:"서포터", diff:"보통", color:"#8a5a2a",
+  desc:"강력한 군중제어와 단단함을 지닌 탱커 서포터. 상대를 뒤집고 아군을 지킵니다.",
+  skills:[
+    ["P","승리의 포효","스킬로 적에게 피해를 주면 아군과 자신을 회복합니다."],
+    ["Q","분쇄","주변 적을 공중에 띄웁니다."],
+    ["W","박치기","대상에게 돌진해 뒤로 밀쳐냅니다."],
+    ["E","짓밟기","주변 적에게 피해를 주고 스택이 쌓이면 기절시킵니다."],
+    ["R","꺾이지 않는 의지","받는 피해를 크게 줄이고 군중제어 효과를 제거합니다."]
+  ],
+  combos:[["W","Q","평타"],["E","W","Q"]],
+  comboNote:"W로 돌진 후 곧바로 Q를 쓰는 'WQ 콤보'가 기본입니다. 필요시 R로 CC를 풀고 계속 싸웁니다.",
+  weak:["모르가나","카르마","잔나","소나"], strong:["애쉬","미스 포츈","카이사"],
+  reason:"원거리 포킹과 CC 무시 효과에 약하고, 라인전 마나 소모가 큽니다.",
+  tips:["WQ 연계는 거리 확인 필수","궁극기는 CC 해제용으로 아끼기","원딜의 이동 경로 수호"]
+},
+{
+  id:"leona", name:"레오나", en:"Leona", title:"여명의 방패", role:"서포터", diff:"쉬움", color:"#d99a2b",
+  desc:"강력한 군중제어 연계로 적을 묶는 돌진형 탱커 서포터입니다.",
+  skills:[
+    ["P","일광","스킬로 표식한 적을 아군이 공격하면 추가 피해를 줍니다."],
+    ["Q","새벽의 방패","다음 공격이 적을 기절시킵니다."],
+    ["W","일식","잠시 방어력/마법 저항을 얻고 폭발해 피해를 줍니다."],
+    ["E","천정검","직선 돌진해 적에게 달라붙고 속박합니다."],
+    ["R","태양 섬광","범위 내 적을 둔화시키고 중앙에는 기절을 겁니다."]
+  ],
+  combos:[["E","Q","W","R"],["R","E","Q"]],
+  comboNote:"E로 접근 → Q 기절 → W로 버티고 궁극기로 광역 CC를 연계합니다.",
+  weak:["모르가나","잔나","룰루","자이라"], strong:["징크스","애쉬","베인"],
+  reason:"인게이지를 막는 쉴드와 넉백 스킬이 있는 서포터에게 약하며, 멀리서 포킹하는 조합에도 약합니다.",
+  tips:["아군 원딜과 같은 타이밍에 이니시","궁극기는 팀 전체 딜 시간에 맞추기","초반 레벨 2 올인이 강력"]
+},
+{
+  id:"nautilus", name:"노틸러스", en:"Nautilus", title:"심해의 거인", role:"서포터", diff:"쉬움", color:"#3a6a8a",
+  desc:"갈고리로 적을 끌어오는 탱커 서포터. 평타와 스킬 모두 속박/기절이 있어 군중제어가 풍부합니다.",
+  skills:[
+    ["P","비틀거리는 타격","평타가 적을 잠깐 속박하며 피해를 줍니다."],
+    ["Q","닻 끌기","닻을 던져 맞춘 적에게 돌진합니다."],
+    ["W","거인의 분노","보호막을 얻고 주변 적에게 지속 피해를 줍니다."],
+    ["E","해일","범위 내 적에게 피해를 주고 둔화시킵니다."],
+    ["R","폭뢰","대상에게 돌진해 공중에 띄웁니다."]
+  ],
+  combos:[["Q","평타","E","R"],["R","Q","평타","E"]],
+  comboNote:"Q로 갈고리를 맞추고 평타 속박→E 둔화→R 띄우기로 연계합니다.",
+  weak:["모르가나","잔나","브라움","카르마"], strong:["징크스","애쉬","카이사"],
+  reason:"갈고리가 미니언에 막히기 쉽고, 쉴드/넉백 서포터에게 약합니다.",
+  tips:["Q 각도를 신경쓰며 덤불 활용","궁극기는 아군에게 가려는 적에게도 사용","초반 레벨 2 올인 가능"]
+}
+,{
+  id:"lulu", name:"룰루", en:"Lulu", title:"요정 마법사", role:"서포터", diff:"보통", color:"#b07fe0",
+  desc:"아군 원딜을 방어막·속도·거대화로 지키는 인챈터 서포터. 하이퍼캐리 원딜(징크스, 유나라 등)과 특히 궁합이 좋습니다. (스킬명은 영문 공식명)",
+  skills:[
+    ["P","Pix, Faerie Companion","요정 픽스가 룰루를 따라다니며 룰루가 평타를 칠 때 첫 대상에게 투사체를 쏩니다. Help, Pix!를 아군에게 쓰면 픽스가 그 아군에게 옮겨갑니다."],
+    ["Q","Glitterlance","룰루와 픽스가 각각 투사체를 쏘아 피해를 주고 적을 둔화시킵니다."],
+    ["W","Whimsy","적에게는 변이(공격·스킬 불가 + 둔화), 아군에게는 공격 속도와 이동 속도 증가를 줍니다."],
+    ["E","Help, Pix!","적에게는 피해와 시야 확보, 아군에게는 방어막과 픽스의 공격 지원을 줍니다."],
+    ["R","Wild Growth","룰루 또는 아군을 거대화시켜 주변 적을 띄우고 체력을 늘려줍니다. 지속 시간 동안 주변 적을 둔화시킵니다."]
+  ],
+  combos:[["W","Q","E"],["E","W","R"]],
+  comboNote:"위협적인 적은 W로 변이시키고, 아군은 E 방어막과 W 속도 버프, 위기에는 R로 띄우고 체력을 늘려 지킵니다.",
+  weak:["레오나","노틸러스","블리츠크랭크"], strong:["(데이터 부족)"],
+  reason:"체력이 낮아 강한 인게이지/암살형에게 압박당하기 쉽습니다. 아군 하이퍼캐리를 지키는 것이 핵심이라 상성보다 아군 조합이 중요합니다.",
+  tips:["하이퍼캐리 원딜에게 W·E를 아끼지 않기","R은 아군 보호 + 적 분리용","변이(W)는 돌진하는 적에게 최고의 방어"]
+}
+];
+
+const ROLES = ["전체","원딜","미드","정글","서포터"];
+let role = "전체";
+const $ = s => document.querySelector(s);
+
+/* ===== 스킬 상세 (LoL 위키 기준, 수치 제외) =====
+   [키, 스킬명, 상세 설명, [태그...]]  — 태그: CC(기절·속박 등)·이동·방어 등 핵심 키워드
+   아래 SKILLS 가 챔피언의 skills 를 덮어씁니다. 스킬을 고칠 때는 여기를 수정하세요. */
+const SKILLS = {
+ jinx:[
+  ["P","흥분 상태!","챔피언·에픽 몬스터·포탑·억제기를 처치하는 데 관여하면(피해를 준 직후) 이동 속도가 크게 올랐다가 서서히 줄고, 공격 속도 증가가 붙으며 공속 상한을 넘을 수 있습니다. 챔피언 처치는 중첩(최대 5)이 쌓여 공속이 더 오릅니다.",["이동속도","공속"]],
+  ["Q","변환!","미니건(Pow-Pow)과 로켓 런처(Fishbones)를 전환합니다. 미니건은 공격할수록 최대 3중첩의 공속이 쌓이고, 로켓은 마나를 쓰는 대신 사거리가 늘고 대상 주변 적에게 범위 피해를 줍니다.",["토글","범위 공격"]],
+  ["W","잽!","직선으로 전기 탄환을 쏴 처음 맞은 적에게 피해와 둔화(2초)를 주고 잠시 시야를 확보합니다. 사거리가 매우 길고, 시전 시간은 공속이 높을수록 짧아집니다.",["둔화","스킬샷","긴 사거리"]],
+  ["E","씹어먹는 폭죽!","지정 위치에 폭죽 3개를 설치합니다(약 0.5초 뒤 활성, 5초 유지). 적 챔피언이 밟으면 폭발해 띄우고 1.5초 속박합니다. 한 챔피언은 폭죽 하나의 영향만 받습니다.",["속박 1.5초","띄우기","설치형"]],
+  ["R","초강력 슈퍼 메가 죽음의 로켓!","전 맵 사거리의 로켓입니다. 많이 날아갈수록, 대상의 잃은 체력이 많을수록 피해가 커지며, 첫 챔피언에게 폭발해 주변 적에게도 감소된 피해를 줍니다. 경로와 폭발 지점의 시야를 얻습니다.",["글로벌","스킬샷","처치 보조"]]],
+ ashe:[
+  ["P","냉기 화살","평타와 스킬이 적중하면 냉기 둔화(2초)를 겁니다. 치명타는 더 강한 둔화를 걸고, 평타에 치명타 확률에 비례하는 추가 피해가 붙습니다.",["둔화"]],
+  ["Q","집중 사격","평타를 때릴 때마다 집중 중첩이 쌓입니다(최대 4, 4초). 4중첩을 쓰면 6초 동안 공속이 오르고 평타가 화살 5발로 퍼집니다. 쿨타임 대신 중첩 재충전이 필요합니다.",["공속","연사"]],
+  ["W","일제 사격","부채꼴로 화살을 쏩니다. 각 화살은 처음 맞은 적에게 피해와 냉기 둔화를 줍니다.",["둔화","부채꼴"]],
+  ["E","매의 눈","맵 어디든 지정한 위치로 매 정령을 보내 경로와 도착 지역의 시야를 5초간 제공합니다. 충전식(최대 2)입니다.",["글로벌 시야","충전식"]],
+  ["R","마법의 수정 화살","전 맵 사거리의 화살입니다. 첫 챔피언을 기절시키며(멀리 날아갈수록 길어져 최대 약 3.5초), 주변 적에게는 같은 피해와 냉기 둔화를 줍니다.",["기절 최대 3.5초","글로벌","스킬샷"]]],
+ ezreal:[
+  ["P","상승하는 주문력","스킬이 적에게 적중할 때마다 공속 중첩(최대 5, 6초)이 쌓입니다. 마법 보호막에 막혀도 중첩은 쌓입니다.",["공속"]],
+  ["Q","신비한 화살","직선 투사체입니다. 평타의 온힛 효과가 적용되며, 적중하면 이즈리얼의 모든 스킬 쿨타임이 1.5초 줄어듭니다.",["스킬샷","쿨타임 감소"]],
+  ["W","정수 흐름","투사체가 처음 맞은 챔피언/에픽 몬스터/구조물에 표식(4초)을 남깁니다. 평타나 스킬로 터뜨리면 추가 마법 피해를 주고, 스킬로 터뜨리면 마나를 회복합니다.",["표식","마나 회복"]],
+  ["E","비전 이동","지정 방향으로 순간이동(최대 약 475)한 뒤 가장 가까운 적(표식 대상 우선)에게 유도 화살을 쏩니다. 대상이 시야에 없어도 맞습니다.",["순간이동","유도"]],
+  ["R","정조준 일격","1초 시전 후 맵 전체로 날아가는 거대한 화살입니다. 맞은 적 모두에게 피해를 주고 경로 시야를 제공합니다.",["글로벌","스킬샷"]]],
+ caitlyn:[
+  ["P","헤드샷","평타 5회마다(덤불 안에서는 4회) 강화 평타가 나가 추가 피해를 줍니다. 덫이나 그물에 걸린 적에게는 사거리 1300에서 추가 헤드샷을 쏠 수 있습니다.",["헤드샷","긴 사거리"]],
+  ["Q","필트오버 피스메이커","직선으로 관통하는 사격입니다. 처음 맞은 적에게 전체 피해, 이후 적에게는 감소된 피해를 줍니다(덫에 걸려 노출된 적은 전체 피해).",["스킬샷","관통"]],
+  ["W","요들 덫","지정 위치에 덫을 설치합니다(1초 뒤 활성, 30~50초 유지). 밟은 챔피언은 1.5초 속박되고 3초간 노출되며 헤드샷을 추가로 맞습니다. 설치 가능 수는 레벨에 따라 늘어납니다.",["속박 1.5초","설치형","노출"]],
+  ["E","90구경 그물","그물을 쏴 처음 맞은 적에게 피해와 50% 둔화(1초)를 주고, 케이틀린은 반대 방향으로 크게 물러납니다. 후퇴 중에도 다른 스킬을 쓸 수 있습니다.",["둔화","후퇴 이동","스킬샷"]],
+  ["R","탄환 세례","대상 챔피언을 지정해 1초 집중한 뒤 유도 사격을 합니다(사거리 매우 김). 대상 근처의 아군 챔피언이 몸으로 막을 수 있고, 집중 중에는 대상과 자신이 노출됩니다.",["저격","긴 사거리","노출"]]],
+ vayne:[
+  ["P","밤사냥꾼","적 챔피언을 바라보며 다가갈 때 이동 속도가 오릅니다. 궁극기 중에는 효과가 3배가 됩니다.",["이동속도"]],
+  ["Q","구르기","지정 방향으로 짧게 굴러 다음 평타가 추가 피해를 줍니다. 평타 타이머가 초기화되며, 궁극기 중에는 쿨타임이 줄고 구르는 순간 1초 은신합니다.",["돌진","평타 강화"]],
+  ["W","은빛 화살 (패시브)","평타와 단죄 적중 시 같은 적에게 중첩이 쌓이고(최대 3, 3.5초), 3번째 중첩에서 대상 최대 체력에 비례한 고정 피해를 줍니다.",["고정 피해","3중첩"]],
+  ["E","단죄","대상 적을 뒤로 밀쳐냅니다. 벽에 부딪히면 추가 피해와 함께 기절시킵니다(약 1.5초).",["넉백","벽 기절","대상 지정"]],
+  ["R","최후의 시간","8~12초 동안 공격력이 오르고 Q 쿨타임이 줄며, Q 사용 시 1초 은신합니다. 챔피언 처치에 관여하면 지속 시간이 연장됩니다(최대 원래 지속 시간까지).",["은신","공격력","쿨타임 감소"]]],
+ missfortune:[
+  ["P","사랑의 매","평타가 새로운 대상(표식 없는 적)을 때릴 때 추가 물리 피해를 주고 흡혈이 적용됩니다. 새 대상을 표식하면 W 쿨타임이 줄어듭니다.",["추가 피해","쿨타임 감소"]],
+  ["Q","더블 업","대상 적에게 사격하고, 뒤에 있는 적에게 튕겨 한 번 더 맞힙니다. 첫 대상을 처치하면 튕긴 탄이 치명타가 됩니다.",["대상 지정","튕김"]],
+  ["W","허세","전투에서 벗어난 지 몇 초 후 이동 속도가 오릅니다(패시브). 사용하면 즉시 이동 속도와 일정 시간 공속이 올라갑니다.",["이동속도","공속"]],
+  ["E","총알 세례","지정 지역에 2초간 탄환을 퍼부어 지속 피해를 주고 안의 적을 40% 둔화시킵니다. 둔화는 정화로 풀 수 없고 시야도 제공합니다.",["둔화 40%","장판","시야"]],
+  ["R","총알 시간","최대 3초 채널링하며 원뿔 범위로 연속 사격합니다. 매 발이 치명타가 될 수 있고, 침묵·기절 등 방해에 끊깁니다. 시전 중 이동은 불가합니다.",["채널링","원뿔","방해받으면 취소"]]],
+ kaisa:[
+  ["P","두 번째 피부","평타와 W가 플라즈마 중첩(최대 5, 4초)을 쌓고, 5중첩이 되면 대상의 잃은 체력에 비례한 마법 피해로 터집니다. 본인·아군의 속박/변이도 중첩을 쌓습니다. 아이템 스탯에 따라 Q/W/E가 진화합니다.",["플라즈마","스킬 진화"]],
+  ["Q","이카시아 비","주변 적에게 유도 미사일 6발을 쏩니다(진화 시 12발). 사거리 안에 적이 있어야 시전할 수 있고, 체력이 낮은 미니언은 두 배 피해를 받습니다.",["유도","근처 대상 필요"]],
+  ["W","공허의 추적자","긴 사거리 직선 광선입니다. 맞은 적을 4초간 노출시키고 플라즈마 2중첩(진화 시 3)을 쌓습니다. 진화하면 챔피언 적중 시 쿨타임의 75%를 돌려받습니다.",["스킬샷","노출","쿨타임 환급(진화)"]],
+  ["E","과충전","시전하는 동안(0.6~1.2초) 유체화와 이동 속도 증가를 얻고, 끝나면 4초간 공속이 오릅니다. 평타마다 쿨타임이 0.5초 줄고, 진화하면 시전 시작 시 0.5초 은신합니다.",["이동속도","공속","유체화"]],
+  ["R","살육 본능","최근 4초 내 플라즈마가 쌓인 적 챔피언 근처로 도약해 2초간 방어막을 얻습니다. 도약 중에도 스킬을 쓸 수 있고 평타 타이머가 초기화됩니다.",["돌진","방어막 2초"]]],
+ jhin:[
+  ["P","속삭임","총알 4발을 쏘고 장전합니다(장전 약 2.5초). 4번째 총알은 반드시 치명타이며 대상의 잃은 체력에 비례한 추가 피해를 줍니다. 치명타를 맞히면 이동 속도가 잠시 오릅니다.",["4번째 치명타","장전"]],
+  ["Q","춤추는 수류탄","대상에게 수류탄을 던지면 주변 적에게 최대 3번 더 튕깁니다. 튕기기 전에 처치된 적이 있으면 피해가 35%씩 증가합니다.",["대상 지정","튕김"]],
+  ["W","죽음의 꽃","긴 직선 저격으로 첫 챔피언에서 멈춥니다. 진·아군에게 피해를 입었거나 덫을 밟은 챔피언은 표식(4초)이 걸리고, 표식 대상에게 맞으면 1.25~2.25초 속박됩니다.",["속박","스킬샷","긴 사거리"]],
+  ["E","관객 모집","은신 덫을 설치합니다(최대 2충전). 적이 밟으면 4초간 노출시키고 35% 둔화(2초) 후 폭발합니다. 진이 적 챔피언을 처치하면 그 자리에 무료 덫이 생깁니다.",["둔화 35%","설치형","노출"]],
+  ["R","커튼콜","최대 10초 동안 대포로 변신해 최대 4번 재시전 사격합니다. 맞은 챔피언을 80% 둔화시키고 노출시키며 4번째 탄은 치명타입니다.",["둔화","4연발","저격"]]],
+ lucian:[
+  ["P","빛의 총잡이","스킬을 쓰면 다음 평타가 0.25초 간격으로 두 번 나갑니다(같은 대상 또는 다른 대상). 아군에게 보호막/회복을 받거나 근처 적이 속박되면 강화탄(Vigilance)이 쌓입니다.",["2연발","강화탄"]],
+  ["Q","꿰뚫는 빛","지정한 적 방향으로 직선 관통 레이저를 쏩니다. 시전 중에는 방향이 바뀌지 않아 옆으로 빠지면 피할 수 있습니다.",["관통","스킬샷"]],
+  ["W","불타는 열정","십자 모양으로 폭발하는 투사체입니다. 적중한 적에게 6초 표식을 남기고, 표식 대상에게 피해를 주면 이동 속도가 오릅니다.",["표식","이동속도"]],
+  ["E","끈질긴 추격","지정 방향으로 짧게 돌진합니다. 돌진 중에도 스킬을 쓸 수 있고 평타 타이머가 초기화되며, 빛의 총잡이가 적중할 때마다 쿨타임이 줄어듭니다(챔피언 대상은 2초).",["돌진","쿨타임 감소"]],
+  ["R","단죄","최대 3초 채널링하며 최대 22발을 난사합니다. 유체화 상태로 이동할 수 있고 재시전하면 종료됩니다. 침묵·기절 등 방해에 끊깁니다.",["채널링","유체화","방해받으면 취소"]]],
+ draven:[
+  ["P","드레이븐의 리그","도끼를 받거나 미니언·몬스터·포탑을 처치하면 명성이 쌓입니다. 챔피언을 처치하면 명성을 소모해 추가 골드를 얻고, 죽으면 명성의 절반을 잃습니다.",["명성","골드"]],
+  ["Q","회전 도끼","5.8초 안에 다음 평타가 도끼를 던져 추가 피해를 줍니다. 도끼는 높이 튀었다가 착지하며, 받으면 다시 강화 평타를 쓸 수 있습니다(최대 도끼 2개).",["평타 강화","도끼 받기"]],
+  ["W","피의 질주","공속이 오르고 이동 속도가 크게 올랐다가 줄어들며 1.5초 유체화됩니다. 회전 도끼를 받으면 쿨타임이 초기화됩니다.",["이동속도","공속","쿨타임 초기화"]],
+  ["E","비켜라!","직선으로 도끼를 던져 맞은 적을 옆으로 밀치고 2초간 둔화시킵니다.",["넉백","둔화","스킬샷"]],
+  ["R","죽음의 회전","전 맵 사거리로 거대한 도끼 2개를 던지며, 재시전하면 도끼가 되돌아옵니다. 현재 명성 수치 이하 체력의 챔피언은 처형됩니다.",["글로벌","스킬샷","처형"]]],
+ xayah:[
+  ["P","깔끔한 일격","스킬을 쓸 때마다 3스택(최대 5, 8초)을 얻고, 평타마다 1스택을 써서 깃털을 날립니다(관통). 사거리 끝에 닿은 깃털은 6초 동안 땅에 박힙니다.",["깃털","관통"]],
+  ["Q","쌍칼","직선으로 단검 두 개를 던집니다. 첫 대상 이후에 맞은 적은 감소된 피해를 받으며, 깃털을 남깁니다.",["스킬샷","깃털 남김"]],
+  ["W","치명적인 깃털","공속이 오르고 평타에 소형 깃털이 추가로 나갑니다. 챔피언에게 맞히면 이동 속도가 오르며, 근처에 라칸이 있으면 라칸도 같이 강화됩니다.",["공속","이동속도"]],
+  ["E","칼날 부르기","땅에 박힌 모든 깃털을 자신에게 불러들이며 피해를 줍니다. 깃털 3개 이상에 맞은 적은 1.25초 속박됩니다(박힌 깃털이 1개 이상 필요).",["속박 1.25초","전 맵 깃털"]],
+  ["R","깃털 폭풍","도약해 1.5초 동안 대상 지정 불가·유체화가 되고, 이후 원뿔 방향으로 깃털 5개를 쏩니다. 시전 중에는 평타와 다른 스킬을 쓸 수 없습니다.",["대상 지정 불가","원뿔"]]],
+ samira:[
+  ["P","저돌적인 충동","다른 챔피언을 연속으로 타격하면 스타일 스택(최대 6, 6초)이 쌓여 이동 속도가 오릅니다. 속박된 적에게는 평타가 6연발로 강화되고 필요하면 돌진해 붙습니다. 최대 스택이 있어야 궁극기를 쓸 수 있습니다.",["스타일 스택","CC 연계"]],
+  ["Q","재주","직선 사격이며, 코앞에 적이 있으면 근접 베기로 바뀝니다. 돌진 중에 쓰면 이동 경로에 폭발물을 남깁니다.",["스킬샷","근접 변형"]],
+  ["W","칼날 선풍","주변을 베어 적의 투사체를 파괴합니다. 시전 중 이동은 가능하지만 평타와 Q는 쓸 수 없습니다.",["투사체 차단"]],
+  ["E","야생의 질주","적이나 구조물을 향해 돌진하며(유닛 통과), 공속이 잠시 오릅니다. 챔피언 처치에 관여하면 쿨타임이 초기화됩니다.",["돌진","쿨타임 초기화"]],
+  ["R","불타는 방아쇠","스타일 최대 스택일 때 사용합니다. 주변 적에게 연속 사격(치명타·흡혈 적용)을 하며, 시전 중에는 평타·Q·W를 쓸 수 없고 방해에 끊깁니다.",["채널링","광역","스택 필요"]]],
+ yunara:[
+  ["P","Vow of the First Lands","치명타가 마법 추가 피해를 입히며(AP 계수), 이 추가 피해에도 흡혈이 적용됩니다.",["치명타 마법 피해"]],
+  ["Q","Cultivation of Spirit","평타에 마법 추가 피해가 붙고, 공격할수록 '해방' 중첩이 쌓입니다(최대 8, 챔피언 공격은 2씩, 6초). 발동하면 5초간 공속·추가 피해가 오르고 평타가 대상 주변 적에게 퍼지며 평타 타이머가 초기화됩니다. 초월 상태에서는 자동으로 발동합니다.",["공속","범위 평타","중첩 소모"]],
+  ["W","Arc of Judgment","회전하는 염주를 던져 처음 맞은 적을 크게 둔화시키고(점차 감소) 피해를 줍니다. 최대 사거리에서 1초 동안 머물며 주변을 때리고 미니언은 처형할 수 있습니다. 초월 상태에서는 Arc of Ruin(둔화 광선)으로 바뀝니다.",["둔화","스킬샷","시야 제공"]],
+  ["E","Kanmei's Steps","돌진기가 아니라 1.5초 동안 유체화와 이동 속도를 얻는 버프입니다(적 챔피언을 바라볼 때 더 강함). 초월 상태에서는 Untouchable Shadow(지정 방향 돌진)로 바뀝니다.",["이동속도","유체화","초월 시 돌진"]],
+  ["R","Transcend One's Self","15초 동안 초월 상태가 되어 Q가 자동 발동하고 W는 광선, E는 돌진으로 강화됩니다. (요약 정보 기준: W 쿨타임이 크게 줄고 E 쿨타임이 초기화됨)",["초월","스킬 강화","자기 대상"]]],
+ azir:[
+  ["P","슈리마의 유산","파괴된 포탑 잔해에서 태양 원반을 소환합니다(0.5초 시전, 5초 조립). 완성되면 내부 포탑 역할을 하며 45초 후 사라지고, 아지르 AP에 따라 공격력이 늘어납니다.",["포탑 소환"]],
+  ["Q","정복자의 모래","모든 모래 병사가 지정 위치로 돌격해 지나간 적에게 피해를 주고 25%(1초) 둔화시킵니다. 병사가 있어야 쓸 수 있으며, 여러 병사가 같은 적을 맞혀도 피해와 둔화는 한 번만 적용됩니다.",["둔화","스킬샷"]],
+  ["W","솟아라!","지정 위치에 모래 병사를 소환합니다(10초 유지, 충전식 최대 2). 아지르가 적에게 평타를 명령하면 병사 사거리 안의 적을 병사가 직선으로 공격합니다. 적 포탑 사거리 안에서는 병사가 두 배로 빨리 사라집니다.",["병사 소환","직선 공격"]],
+  ["E","모래 이동","가장 가까운 모래 병사에게 돌진하며 경로의 적에게 피해를 주고 1.5초 방어막을 얻습니다. 챔피언을 맞히면 멈추고 솟아라! 충전을 얻습니다. 돌진 중에도 다른 스킬을 쓸 수 있습니다.",["돌진","방어막 1.5초"]],
+  ["R","황제의 분할","아지르 뒤쪽 병사 방진이 앞으로 돌진해 적을 앞으로 밀쳐내며(공중), 이후 병사가 벽이 되어 적은 지나갈 수 없고 아군은 통과합니다.",["넉백","벽","스킬샷"]]],
+ aurora:[
+  ["P","Spirit Abjuration","평타와 스킬이 적에게 표식을 쌓아(최대 3, 4초) 3중첩이 되면 최대 체력 비례 마법 피해로 터집니다. 챔피언이 대상이면 영혼이 풀려나 오로라를 따라다니며 초당 체력을 회복시킵니다(영혼 최대 4).",["표식 3중첩","회복"]],
+  ["Q","Twofold Hex","저주 볼트를 날려 적을 표식(3.5초)합니다. 재시전하면(자동 재시전 포함) 표식을 모두 소모하며 저주를 되돌려 경로상의 적에게 잃은 체력 비례 피해를 줍니다.",["표식","스킬샷","재시전"]],
+  ["W","Across the Veil","영혼 포털을 통해 지정 방향으로 도약해 잠시(약 1~1.6초) 은신하고 이후 4초간 유체화와 이동 속도를 얻습니다. 챔피언 처치에 관여하면 쿨타임이 초기화됩니다. 도약 중에는 다른 행동을 할 수 없습니다.",["돌진","은신","쿨타임 초기화"]],
+  ["E","The Weirding","직선으로 에너지를 쏴 적에게 피해와 80% 둔화(약 1초)를 주고, 오로라는 뒤로 밀려납니다(속박 중에는 밀리지 않음).",["둔화 80%","후퇴 이동","스킬샷"]],
+  ["R","Between Worlds","앞으로 도약하며 충격파를 일으켜 적에게 피해와 30% 둔화(2초)를 줍니다. 영혼 세계로 이어지는 균열이 남아, 오로라가 경계를 닿으면 반대편으로 순간 이동하고, 적이 닿으면 둔화됩니다. 재시전하면 균열이 닫힙니다.",["둔화","돌진","균열 이동"]]],
+ taliyah:[
+  ["P","돌 서핑","지형 근처에서 이동 속도가 오릅니다. 전투나 스킬 시전 직후에는 잠시 효과가 멈춥니다.",["이동속도"]],
+  ["Q","실타래 연발","돌 파편 5발을 1.5초에 걸쳐 쏩니다. 파편이 맞은 적에게 시야를 줍니다. 시전하면 발밑에 '작업된 땅'이 생기고, 그 위에서 다시 쓰면 마나 10·쿨타임 절반의 강화 Q(거대 바위)가 나가 맞은 적을 1.5초 둔화시킵니다(몬스터는 3초 기절).",["둔화(강화 Q)","땅 생성","스킬샷"]],
+  ["W","지진 밀치기","위치와 방향을 지정합니다. 약 0.8초 뒤 땅이 솟아 적을 띄워 지정 방향으로 밀어냅니다(공중).",["띄우기","밀어내기","벡터 스킬샷"]],
+  ["E","풀려난 대지","전방 부채꼴로 돌 22개를 뿌려 피해를 주고 4초 동안 남겨 안의 적을 20% 둔화시킵니다. 적이 돌 위로 돌진하거나 띄워진 채 이동하면 돌이 폭발해 0.75초 기절시킵니다(몬스터는 2초). 시전 자체에는 기절이 없습니다.",["기절 0.75초(돌진/띄워졌을 때)","둔화 20%","설치형"]],
+  ["R","직조자의 벽","긴 직선으로 바위를 쏟아 맞은 챔피언을 옆으로 밀어내고(공중) 지형 벽을 만듭니다. 시전 후 재시전하면 벽을 타고 이동하다 도약할 수 있습니다. 벽은 완성 후 4초가 지나면 사라집니다.",["밀어내기","벽","이동"]]],
+ chogath:[
+  ["P","육식","적을 처치하면 체력과 마나를 회복합니다(포탑 파괴도 포함, 와드는 제외).",["회복"]],
+  ["Q","균열","지정 위치에서 잠시 뒤 땅이 솟아올라 적을 1초 띄우고, 이후 60%로 1.5초 둔화시킵니다. 띄우기가 풀려도 둔화는 남습니다.",["띄우기 1초","둔화","범위"]],
+  ["W","야수의 비명","원뿔 방향으로 괴성을 질러 피해를 주고 약 1.6~2초 침묵시킵니다.",["침묵","원뿔"]],
+  ["E","날카로운 가시","6초 동안 다음 평타 3번이 사거리가 늘고 직선으로 가시를 발사합니다. 맞은 적에게 피해(최대 체력·포식 중첩 비례)와 둔화를 줍니다.",["평타 강화","둔화"]],
+  ["R","포식","대상 챔피언을 지정해 먹어 치우며, 포식 대상의 현재 체력이 입히는 확정 피해보다 낮으면 처형됩니다. 처치하면 영구 중첩이 쌓여 체력·크기·사거리가 커집니다(미니언·몬스터는 최대 6중첩).",["처형","영구 성장","대상 지정"]]],
+ nocturne:[
+  ["P","그림자 칼날","일정 주기마다 다음 평타가 주변 원형으로 퍼져 적들에게 피해를 주고, 맞힌 적 수에 비례해 체력을 회복합니다.",["광역 평타","회복"]],
+  ["Q","땅거미 일격","직선 투사체입니다. 맞은 챔피언은 5초 동안 '그림자 길'을 남기고, 녹턴이 그 길 위에서 유체화·공격력·이동 속도를 얻습니다.",["스킬샷","유체화","이동속도"]],
+  ["W","어둠의 장막","패시브로 공속이 오릅니다. 사용하면 1.5초 동안 스킬 방어막이 생기며, 적 스킬을 막으면 공속 증가가 두 배로(5초) 늘어납니다.",["스킬 방어막","공속"]],
+  ["E","끔찍한 공포","대상 적을 지정해 2초 동안 연결합니다. 끊기지 않으면 공포(1.25~2.25초)에 걸리고 90% 둔화됩니다. 공포에 걸린 적 쪽으로 이동할 때 이동 속도가 크게 오릅니다.",["공포","둔화 90%","연결"]],
+  ["R","편집증","모든 적 챔피언의 시야를 6초간 줄입니다. 이 시간 안에 재시전하면 대상 챔피언에게 돌진해 피해를 줍니다(돌진 중 CC에 끊기지 않음).",["시야 감소","돌진","글로벌"]]],
+ sejuani:[
+  ["P","북부의 분노","피해를 받으면 서리 갑옷이 활성화되어 방어력·마법 저항이 오르고 둔화에 면역이 됩니다. 기절시킨 적은 '빙결' 표식이 붙어, 다음 평타/스킬이 최대 체력 비례 추가 피해를 줍니다.",["방어력","빙결 표식"]],
+  ["Q","북극의 돌진","지정 위치로 돌진해 닿은 적을 띄웁니다. 챔피언에 닿으면 멈추고 평타를 이어갑니다. 돌진 중 다른 스킬을 쓸 수 있습니다.",["돌진","띄우기"]],
+  ["W","겨울의 분노","철퇴를 휘둘러 원뿔 범위 피해를 주고 미니언·몬스터를 밀친 뒤, 같은 방향으로 직선 채찍을 날려 적을 75% 둔화시킵니다(짧게).",["둔화","원뿔+직선"]],
+  ["E","영구동토","패시브: 본인과 근처 근접 아군의 평타가 서리 중첩(최대 4)을 쌓습니다. 활성: 4중첩이 쌓인 가장 가까운 적에게 덫을 던져 피해와 1초 기절을 줍니다(중첩 소모).",["기절 1초(4중첩)","대상 지정"]],
+  ["R","얼음 감옥","직선 빙구를 날려 처음 맞은 챔피언을 기절시키고, 멀리 날아가면 강화되어 더 길게 기절시킵니다. 이후 서리 폭풍이 생겨 안의 적을 둔화시키고 터져 추가 피해를 줍니다.",["기절","둔화 장판","스킬샷"]]],
+ maokai:[
+  ["P","수액 마법","주기적으로 다음 평타가 최대 체력 비례로 회복합니다. 스킬을 쓰거나 적 스킬에 맞으면 쿨타임이 줄고, 묘목 던지기가 적중하면 4초 줄어듭니다.",["회복"]],
+  ["Q","가시 부수기","충격파를 발사해 피해를 주고 맞은 적을 잠깐 99% 둔화시킵니다. 가까이 있는 적은 0.5초 기절하며 뒤로 밀려납니다.",["넉백","기절 0.5초(근거리)","둔화"]],
+  ["W","뒤틀린 전진","대상 적에게 돌진해 도착 시 피해를 주고 1~1.4초 속박합니다. 돌진 중에는 대상 지정 불가입니다.",["돌진","속박","대상 지정"]],
+  ["E","묘목 투척","지정 위치로 묘목을 던집니다. 묘목은 적이 보이면 쫓아가 폭발하며 피해를 주고 45%(2초) 둔화시킵니다. 덤불에 심으면 더 오래 남고 시야를 주며 대상에 붙어 여러 번 터집니다.",["둔화 45%","덤불 강화","시야"]],
+  ["R","자연의 손아귀","덩굴 5개를 앞으로 보내 천천히 가속하며 전진합니다. 닿은 챔피언은 피해와 함께 이동 거리에 비례해 0.75~2.25초 속박됩니다. 한 명이라도 맞히면 마오카이의 이동 속도가 잠시 오릅니다.",["속박 최대 2.25초","긴 사거리","스킬샷"]]],
+ seraphine:[
+  ["P","무대 장악력","스킬을 2번 쓰면 다음 스킬이 한 번 더 자동 시전됩니다(에코, 쿨타임에는 영향 없음). 스킬을 쓸 때마다 본인과 주변 아군이 음표(최대 4, 6초)를 얻고, 다음 평타의 사거리가 늘며 음표 수만큼 마법 피해를 줍니다.",["이중 시전","음표"]],
+  ["Q","하이 노트","지정 위치에 음파가 퍼져 범위 피해를 줍니다. 적의 잃은 체력이 많을수록 피해가 커집니다.",["범위 피해"]],
+  ["W","서라운드 사운드","2.5초 동안 본인과 주변 아군에게 방어막과 이동 속도를 줍니다. 이미 방어막이 있는 상태로 쓰면 끝나고 파동이 터져 아군을 회복시킵니다.",["방어막","회복","이동속도"]],
+  ["E","비트 드롭","직선 음파로 적을 99% 둔화시키고, 이미 둔화된 적은 속박, 속박/띄워진 적은 기절시킵니다(약 1.1~1.5초). 단계 상승은 세라핀과 아군이 건 CC에만 반응합니다.",["둔화→속박→기절","스킬샷"]],
+  ["R","앙코르","직선으로 음파를 날려 맞은 적을 매혹시킵니다. 아군/적 챔피언을 지나면 사거리가 재충전되어 계속 나아가고, 지나간 아군은 음표를 얻습니다. 매혹은 속박 효과입니다.",["매혹","사거리 연장","스킬샷"]]],
+ rakan:[
+  ["P","요정 깃털","일정 주기로 방어막을 얻으며, 챔피언을 적중할 때마다 쿨타임이 줄어듭니다. 자야와는 귀환 시 함께 합류할 수 있습니다.",["방어막"]],
+  ["Q","빛나는 깃펜","직선으로 깃털을 던져 처음 맞은 적에게 피해를 줍니다. 챔피언/에픽 몬스터를 맞히면 라칸 주변에 원이 생겨 약 3초 뒤(아군이 들어가면 즉시) 본인과 근처 아군을 회복시킵니다.",["회복","스킬샷"]],
+  ["W","화려한 등장","지정 위치로 돌진한 뒤 0.35초 후 주변 적을 1초 띄웁니다. 돌진 중 속박/변이를 당하면 넘어지며 취소됩니다.",["돌진","띄우기 1초"]],
+  ["E","전투 춤","아군 챔피언에게 3초 방어막을 씌우고 그 곁으로 돌진합니다. 5초 안에 마나 소모 없이 재시전하면 같은 효과가 한 번 더 발동합니다. 자야 대상은 더 멀리서 쓸 수 있습니다.",["방어막 3초","돌진","재시전 무료"]],
+  ["R","빠름","4초 동안 유체화로 질주하며 부딪힌 적에게 피해, 매혹(1~1.5초), 75% 둔화를 줍니다. 챔피언과 닿으면 지속 시간이 늘어납니다.",["매혹","둔화 75%","돌진"]]],
+ alistar:[
+  ["P","승리의 포효","기절/밀쳐내기 등으로 적 챔피언을 제어하거나 근처에서 미니언이 죽으면 스택이 쌓입니다(챔피언·에픽 처치 근처는 7스택). 7스택이면 본인과 아군을 회복시키며, 본인이 더 많이 받습니다.",["회복"]],
+  ["Q","분쇄","주변 적을 즉시 기절시키고 띄웁니다(1초). 대상 지정이 필요 없고 박치기 중에 예약 시전할 수 있습니다.",["기절 1초","띄우기","범위"]],
+  ["W","박치기","대상 적에게 돌진합니다. 도착했을 때 400 이내에 있으면 700 거리를 밀쳐내고 0.75초 기절시킵니다. 돌진 중 Q를 예약하면 밀쳐내기 거리가 줄어듭니다.",["돌진","기절 0.75초","넉백"]],
+  ["E","짓밟기","5초 동안 유체화되어 0.5초마다 주변에 피해를 줍니다. 챔피언을 적중하면 스택(최대 5)이 쌓이고, 5스택이면 다음 평타가 대상을 1초 기절시킵니다.",["기절 1초(5스택)","유체화","범위"]],
+  ["R","꺾이지 않는 의지","시전 즉시 걸려 있는 CC를 해제하고 약 7초 동안 받는 피해가 크게 줄어듭니다(확정 피해는 감소하지 않음).",["CC 해제","피해 감소"]]],
+ leona:[
+  ["P","일광","스킬에 맞은 적에게 표식(2.5초)이 붙고, 아군의 공격이 표식을 소모해 추가 마법 피해를 줍니다.",["표식"]],
+  ["Q","새벽의 방패","다음 평타(6초 내)가 강화되어 사거리가 늘고 추가 피해와 함께 1초 기절시킵니다. 평타 타이머가 초기화됩니다.",["기절 1초","평타 강화"]],
+  ["W","일식","3초 동안 피해 감소와 방어력·마법 저항 증가를 얻고, 끝에 폭발해 주변 적에게 피해를 줍니다. 폭발이 적중하면 지속이 3초 더 연장됩니다.",["피해 감소","범위 폭발"]],
+  ["E","천정검","직선으로 검을 날려 맞은 적들에게 피해를 주고, 챔피언을 맞히면 마지막으로 맞힌 챔피언에게 돌진해 0.5초 속박시킵니다.",["돌진","속박 0.5초","스킬샷"]],
+  ["R","태양 섬광","지정 위치에 약 0.625초 후 태양 섬광이 떨어져 범위 내 적을 80% 둔화(1.75초)시키고, 중심부의 적은 같은 시간 기절시킵니다.",["기절 1.75초(중심)","둔화 80%","범위"]]],
+ nautilus:[
+  ["P","비틀거리는 타격","평타가 추가 피해를 주고 대상을 짧게(0.75~1.5초) 속박합니다. 같은 대상에게는 재발동 대기 시간이 있습니다.",["속박","평타 효과"]],
+  ["Q","닻 끌기","직선으로 닻을 던져 처음 맞은 적을 1초 기절시키고 서로 끌어당긴 뒤 속박합니다. 지형에 맞으면 그곳으로 돌진하고 쿨타임·마나를 절반 돌려받습니다.",["기절 1초","끌어오기","돌진","스킬샷"]],
+  ["W","거인의 분노","6초 동안 방어막을 얻고, 방어막이 유지되는 동안 평타가 대상과 주변 적에게 지속 피해를 입힙니다.",["방어막","지속 피해"]],
+  ["E","해일","자신 주변에서 3번의 파동이 퍼져 맞은 적에게 피해와 둔화(30~50%)를 줍니다. 두 번째·세 번째 파동은 피해가 줄어듭니다.",["둔화","범위"]],
+  ["R","폭뢰","대상 챔피언을 추적하는 폭뢰를 발사해 지나간 길에 폭발이 일어나 적을 띄우고 기절시킵니다. 도착하면 최종 폭발로 대상을 1~2초 기절·띄웁니다.",["기절","띄우기","대상 지정","돌진 폭발"]]],
+ lulu:[
+  ["P","Pix, Faerie Companion","요정 픽스가 룰루를 따라다니며 룰루가 평타를 칠 때 처음 맞은 적에게 마법 투사체 3발을 쏩니다. Help, Pix!를 아군에게 쓰면 픽스가 그 아군의 평타를 지원합니다.",["지원 사격"]],
+  ["Q","Glitterlance","룰루와 픽스가 각자 위치에서 투사체를 쏴 적을 80% 둔화시키고(점차 감소) 피해를 줍니다. 두 번째 투사체는 감소된 추가 피해를 줍니다.",["둔화 80%","스킬샷"]],
+  ["W","Whimsy","적 챔피언에게 쓰면 변이(공격·스킬 불가 1.2~2초)와 이동 속도 감소를 줍니다. 아군(자신 포함)에게 쓰면 3~4초 동안 공속과 이동 속도가 오릅니다.",["변이","공속·이속 버프","대상 지정"]],
+  ["E","Help, Pix!","적에게 쓰면 픽스가 대상 뒤에 4초 머물며 피해와 시야 노출을 줍니다. 아군 챔피언에게 쓰면 방어막(2.5초)을 주고 픽스가 6.25초 동안 그 아군의 공격을 지원합니다.",["방어막","노출","대상 지정"]],
+  ["R","Wild Growth","룰루 또는 아군을 거대화해 주변 적을 1초 띄워 밀쳐내고, 대상에게 추가 체력을 줍니다. 7초 동안 크기가 커지며 주변 적을 30~60% 둔화시키는 오라가 남습니다.",["띄우기 1초","체력 증가","둔화 오라"]]]
+};
+CHAMPIONS.forEach(c=>{ if(SKILLS[c.id]) c.skills = SKILLS[c.id]; });
+
+const IMG_KEYS = {jinx:"Jinx",ashe:"Ashe",ezreal:"Ezreal",caitlyn:"Caitlyn",vayne:"Vayne",missfortune:"MissFortune",kaisa:"Kaisa",jhin:"Jhin",lucian:"Lucian",draven:"Draven",xayah:"Xayah",samira:"Samira",azir:"Azir",aurora:"Aurora",taliyah:"Taliyah",chogath:"Chogath",nocturne:"Nocturne",sejuani:"Sejuani",maokai:"Maokai",seraphine:"Seraphine",rakan:"Rakan",alistar:"Alistar",leona:"Leona",nautilus:"Nautilus",yunara:"Yunara",lulu:"Lulu"};
+
+/* ===== 시기별 강함 (1~5) : [초반, 중반, 후반] + 한 줄 설명 =====
+   초반=라인전(레벨 1~6) / 중반=핵심 아이템 1~2개 / 후반=풀빌드 한타 */
+const POWER = {
+ jinx:[[2,3,5],"초반엔 약하지만 킬/어시를 쌓고 풀빌드가 되면 한타 최강급입니다."],
+ ashe:[[3,4,4],"초반이 무난하고 중반 이후 CC·시야·궁극기로 꾸준히 강합니다."],
+ ezreal:[[3,4,4],"초반 견제는 안정적이고 아이템이 갖춰지는 중반부터 가장 편합니다."],
+ caitlyn:[[5,4,3],"사거리로 초반 라인전을 지배하고 타워를 빠르게 깨는 초반 강세 챔피언입니다."],
+ vayne:[[2,3,5],"초반은 가장 약한 편이지만 풀빌드 후엔 탱커도 녹이는 후반 캐리입니다."],
+ missfortune:[[4,4,3],"라인전과 중반 한타가 강하고 후반엔 안전을 보장받아야 합니다."],
+ kaisa:[[3,4,5],"아이템과 진화가 완성될수록 폭딜이 올라가는 후반 강세입니다."],
+ jhin:[[3,4,4],"꾸준히 견제하고 중반 이후 CC 연계로 가치를 냅니다."],
+ lucian:[[5,4,2],"초반 올인이 매우 강하지만 후반으로 갈수록 지속 딜이 밀립니다."],
+ draven:[[5,4,3],"초반에 눈덩이를 굴려야 하며, 지면 만회가 어려운 초반 강세입니다."],
+ xayah:[[3,4,4],"라칸과 함께 중반 교전에서 강하고 후반에도 안정적입니다."],
+ samira:[[4,5,4],"라인전과 중반 교전 진입이 강력합니다. 방어 아이템이 쌓인 상대에는 줄어듭니다."],
+ azir:[[2,4,5],"초반은 약하지만 라인을 정리하고 후반 한타에서 크게 빛납니다."],
+ aurora:[[3,4,4],"중반 이후 은신 도약과 표식 폭딜로 가치가 큽니다."],
+ taliyah:[[4,4,3],"라인전과 로밍에서 강하고 후반엔 스킬샷 난이도가 높아집니다."],
+ chogath:[[2,4,5],"처치와 스택이 쌓이면서 후반에 엄청난 탱커·처형 역할을 합니다."],
+ nocturne:[[3,4,4],"레벨 6 궁극기 이후와 중반 암살·갱킹에 강합니다."],
+ sejuani:[[3,4,4],"레벨 6 이후 이니시가 좋아지고 중반 한타 개시에 강력합니다."],
+ maokai:[[3,4,4],"초반은 보통이지만 중반 이후 CC와 앞라인으로 안정적입니다."],
+ seraphine:[[3,4,5],"후반 한타에서 방패·CC·딜을 모두 제공합니다."],
+ rakan:[[4,4,3],"중반 교전과 이니시가 강하고 후반엔 한 번의 실수가 치명적입니다."],
+ alistar:[[4,4,3],"초반 올인과 중반 교전에 강하며 후반에도 앞라인으로 쓸모가 있습니다."],
+ leona:[[5,4,3],"레벨 2 올인이 가장 강하고 후반엔 이니시 한 방을 노립니다."],
+ nautilus:[[4,4,3],"초반 올인과 중반 갱킹에 강하고 후반에도 CC를 제공합니다."],
+ yunara:[[3,4,5],"아이템이 쌓이고 초월 상태를 쓸수록 강해지는 후반 강세로 평가됩니다. (체감 기준, 참고용)"],
+ lulu:[[3,4,5],"하이퍼캐리 원딜을 후반까지 지켜 한타에서 폭발시키는 서포터입니다."]
+};
+const PHASES = ["초반","중반","후반"];
+function powerType(v){
+  if(v[2]-v[0]>=2) return ["후반","후반 캐리형"];
+  if(v[0]-v[2]>=2) return ["초반","초반 강세형"];
+  return ["고른","고른 성장형"];
+}
+
+/* ===== 폭딜 콤보 =====  id:[[순서...], "사용 요령"]  (평타=기본 공격) */
+const BURST = {
+ jinx:[["W","평타","R","평타"],"W 둔화로 거리를 좁히고, 체력이 낮아진 상대에게 R로 마무리합니다. R 피해는 잃은 체력에 비례합니다."],
+ ashe:[["R","Q","평타","평타","W"],"R로 기절시킨 뒤 Q 연속 사격으로 딜을 넣고 W로 마무리합니다."],
+ ezreal:[["W","Q","E","Q","R"],"W 표식을 Q로 터뜨리고, E로 위치를 바꿔 Q를 한 번 더 맞춘 뒤 R로 마무리합니다."],
+ caitlyn:[["W","E","평타","Q","R"],"덫에 걸린 적을 헤드샷 평타로 때리고 Q로 이어갑니다. R은 킬 확정일 때만 사용하세요."],
+ vayne:[["R","Q","평타","평타","평타","E"],"W 3스택(3번째 평타)을 맞추고, 벽 쪽에서 E로 기절시켜 마무리합니다."],
+ missfortune:[["E","Q","평타","R"],"E로 둔화시켜 이동을 막은 뒤 R을 쏟아붓습니다. 아군 CC 뒤에 쓰면 가장 강합니다."],
+ kaisa:[["W","R","평타","Q","평타"],"W로 플라즈마를 쌓고 R로 붙어 평타·Q로 폭발시킵니다. 진화 스킬 상태에서 위력이 큽니다."],
+ jhin:[["E","W","Q","평타","R"],"덫과 W 속박으로 묶고, Q와 4번째 평타(치명타)로 마무리합니다. R은 소수 상대로 킬 확정 때 사용."],
+ lucian:[["E","평타","Q","평타","W","평타","R"],"스킬 후 평타 2연발 효과를 이용해 '스킬-평타'를 번갈아 넣습니다. 초반 폭딜이 가장 강합니다."],
+ draven:[["E","Q","W","평타","Q","평타","R"],"E로 붙잡고 W로 속도를 올려 도끼 평타를 퍼붓습니다. 도망가는 상대는 R로 마무리합니다."],
+ xayah:[["W","Q","평타","E"],"깃털을 최대한 꽂아두고 E로 한꺼번에 불러 피해와 속박을 줍니다."],
+ samira:[["E","평타","Q","W","R"],"스킬을 끊김 없이 이어 S등급을 만들고 R로 광역 폭딜을 넣습니다."],
+ azir:[["W","W","E","Q","평타"],"병사를 깔고 E로 이동해 Q를 쓰는 셔플 콤보입니다. 필요하면 R로 밀어내거나 가두세요."],
+ aurora:[["Q","E","평타","Q","R"],"표식 3중첩 폭발이 핵심입니다. Q 재시전으로 되돌리며 추가 피해를 주고 R로 마무리합니다."],
+ taliyah:[["W","E","Q","Q"],"W로 띄운 순간 E 지면 효과 위에서 Q를 연사합니다."],
+ chogath:[["Q","W","평타","R"],"Q로 띄우고 W로 침묵시킨 뒤 R로 처형합니다. R은 체력이 낮은 챔피언에게만 확실합니다."],
+ nocturne:[["R","Q","E","평타","평타"],"R로 돌진해 E 공포로 묶고 평타를 연타합니다. W로 상대 CC를 막을 수 있습니다."],
+ sejuani:[["Q","W","E","평타","R"],"Q로 이니시를 걸고 W·E로 서리를 쌓아 R로 확정 기절을 줍니다. 딜보다 CC 연계가 목적입니다."],
+ maokai:[["W","Q","E","평타","R"],"W로 묶고 Q로 밀친 뒤 묘목으로 지속 피해를 줍니다. 딜보다 CC 연계가 목적입니다."],
+ seraphine:[["E","Q","평타","R"],"3번째 스킬마다 나가는 추가 음표를 활용하고, R로 광역 매혹을 걸어 한타를 뒤집습니다."],
+ rakan:[["E","R","W","Q"],"E로 접근해 R 매혹, W 띄우기로 이어갑니다. 폭딜보다 CC 연계와 아군 보호가 목적입니다."],
+ alistar:[["W","Q","평타","E","평타"],"WQ로 띄운 뒤 E 스택으로 기절을 완성합니다. 딜보다 CC 연계가 목적입니다."],
+ leona:[["E","Q","평타","W","R"],"E로 붙어 Q 스턴, W 폭발과 R로 광역 CC를 마무리합니다. 딜보다 CC 연계가 목적입니다."],
+ yunara:[["R","E","W","Q","평타"],"R로 초월 상태에 들어가 E 돌진, W 광선으로 딜을 넣고 Q 해방으로 평타를 퍼붓습니다."],
+ lulu:[["W","Q","E","평타"],"폭딜보다 아군 보호가 목적입니다. 적은 W로 변이시키고 Q로 둔화, E로 아군을 지킵니다."],
+ nautilus:[["Q","평타","E","평타","R"],"갈고리로 끌어와 평타 속박→E 둔화→R 띄우기로 연계합니다. 딜보다 CC 연계가 목적입니다."]
+};
+function burstLine(c){
+  const b = BURST[c.id]; if(!b) return "";
+  return `<div class="bline" title="폭딜 콤보">💥 ${b[0].join("→")}</div>`;
+}
+function burstSection(c){
+  const b = BURST[c.id]; if(!b) return "";
+  const keys = ["P","Q","W","E","R"];
+  const steps = b[0].map((k,i)=>`<span class="n">${i+1}</span><span class="k ${keys.includes(k)?'':'aa'}">${k}</span>`).join("<i>→</i>");
+  return `<section class="burst"><h3>💥 폭딜 콤보</h3>
+    <div class="bsteps">${steps}</div>
+    <p class="reason" style="margin:6px 0 0">${b[1]}</p></section>`;
+}
+function miniBars(c){
+  const pw = POWER[c.id]; if(!pw) return "";
+  return `<div class="mini-wrap" title="초반·중반·후반"><div class="ml"><span>초</span><span>중</span><span>후</span></div><div class="mini">${pw[0].map(v=>`<i style="height:${v*4}px"></i>`).join("")}</div></div>`;
+}
+function powerSection(c){
+  const pw = POWER[c.id]; if(!pw) return "";
+  const v = pw[0], [k,label] = powerType(v);
+  const X=[50,200,350], Y=x=>110-(x-1)*24;
+  const pts = v.map((val,i)=>[X[i],Y(val)]);
+  const line = `M${pts[0][0]},${pts[0][1]} C${pts[0][0]+75},${pts[0][1]} ${pts[1][0]-75},${pts[1][1]} ${pts[1][0]},${pts[1][1]} C${pts[1][0]+75},${pts[1][1]} ${pts[2][0]-75},${pts[2][1]} ${pts[2][0]},${pts[2][1]}`;
+  const area = line + ` L${pts[2][0]},118 L${pts[0][0]},118 Z`;
+  const grid = [1,2,3,4,5].map(n=>`<line x1="20" x2="380" y1="${Y(n)}" y2="${Y(n)}" stroke="#2a3a5e" stroke-dasharray="3 4"/><text x="8" y="${Y(n)+4}" fill="#9aa7bd" font-size="10">${n}</text>`).join("");
+  const dots = pts.map((pt,i)=>`<circle cx="${pt[0]}" cy="${pt[1]}" r="6" fill="#0ac8b9" stroke="#0a1428" stroke-width="2"/><text x="${pt[0]}" y="${pt[1]-12}" text-anchor="middle" fill="#e8e6df" font-size="12" font-weight="bold">${v[i]}</text><text x="${pt[0]}" y="146" text-anchor="middle" fill="#c8aa6e" font-size="12" font-weight="bold">${PHASES[i]}</text>`).join("");
+  const rows = v.map((val,i)=>`<div class="prow"><span class="lb">${PHASES[i]}</span><span class="pips">${[1,2,3,4,5].map(n=>`<span class="pip ${n<=val?'on':''}"></span>`).join("")}</span><span class="nm">${["매우 약함","약함","보통","강함","매우 강함"][val-1]}</span></div>`).join("");
+  return `<section><h3>📈 시기별 강함</h3>
+    <span class="pbadge pb-${k}">${label}</span>
+    <svg class="power-svg" viewBox="0 0 400 155" role="img" aria-label="${c.name} 시기별 강함 그래프">
+      <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0ac8b9" stop-opacity=".45"/><stop offset="1" stop-color="#0ac8b9" stop-opacity="0"/></linearGradient></defs>
+      ${grid}<path d="${area}" fill="url(#pg)"/><path d="${line}" fill="none" stroke="#0ac8b9" stroke-width="3"/>${dots}
+    </svg>
+    ${rows}
+    <p class="reason" style="margin-top:8px">${pw[1]}</p>
+    <p class="plegend">초반=라인전(레벨 1~6) · 중반=핵심 아이템 1~2개 · 후반=풀빌드 한타 / 1(약함)~5(최강). 체감 기준의 참고용입니다.</p>
+  </section>`;
+}
+function initials(c){ return c.name[0]; }
+/* 초상화: Riot Data Dragon 이미지. 불러오지 못하면 이름 첫 글자가 보입니다. */
+function portrait(c){
+  const k = IMG_KEYS[c.id];
+  const img = k ? `<img loading="lazy" alt="${c.name}" src="https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${k}_0.jpg" onerror="this.remove()">` : "";
+  return `<div class="avatar" style="background:${c.color}">${initials(c)}${img}</div>`;
+}
+function renderRoles(){
+  $("#roles").innerHTML = ROLES.map(r=>`<button class="chip ${r===role?'on':''}" data-r="${r}">${r}</button>`).join("");
+  $("#roles").querySelectorAll("button").forEach(b=>b.onclick=()=>{role=b.dataset.r;renderRoles();renderGrid();});
+}
+function renderGrid(){
+  const q = $("#q").value.trim().toLowerCase();
+  const list = CHAMPIONS.filter(c=>(role==="전체"||c.role===role) &&
+    (!q || c.name.toLowerCase().includes(q) || c.en.toLowerCase().includes(q)));
+  if(!list.length){ $("#grid").innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`; return; }
+  const groups = ROLES.filter(r=>r!=="전체").map(r=>[r, list.filter(c=>c.role===r)]).filter(g=>g[1].length);
+  $("#grid").innerHTML = groups.map(([r,items])=>`
+    <div class="grp"><h2>${r}<small>${items.length}명</small></h2>
+    <div class="grid">${items.map(c=>`
+      <div class="card" data-id="${c.id}">
+        ${portrait(c)}
+        <b>${c.name}</b><small>${c.en}</small>
+        ${patchBadge(c)}
+        ${miniBars(c)}
+        ${burstLine(c)}
+      </div>`).join("")}</div></div>`).join("");
+  $("#grid").querySelectorAll(".card").forEach(el=>el.onclick=()=>show(el.dataset.id));
+}
+function findByName(n){ return CHAMPIONS.find(c=>c.name===n); }
+function chips(arr){
+  return arr.map(n=>{const c=findByName(n);return `<span class="cn" ${c?`data-go="${c.id}"`:''}>${n}</span>`}).join("");
+}
+function show(id){
+  const c = CHAMPIONS.find(x=>x.id===id); if(!c) return;
+  $("#list").style.display="none"; $("#duo").style.display="none"; $("#patch").style.display="none";
+  const d = $("#detail"); d.style.display="block";
+  d.innerHTML = `
+    <button class="back">← 목록으로</button>
+    <div class="head">
+      ${portrait(c)}
+      <div><h2>${c.name} <small style="color:var(--mute);font-size:.9rem">${c.en}</small></h2>
+        <div style="color:var(--mute)">${c.title}</div>
+        <span class="tag">${c.role}</span><span class="tag">난이도 ${c.diff}</span></div>
+    </div>
+    ${powerSection(c)}
+    ${synergySection(c)}
+    ${supAvoidSection(c)}
+    ${burstSection(c)}
+    <div class="two">
+      <section class="weak"><h3>⚠ 상대하기 어려운 챔피언</h3>${chips(c.weak)}</section>
+      <section class="strong"><h3>✅ 상대하기 쉬운 챔피언</h3>${chips(c.strong)}</section>
+    </div>
+    <section><p class="reason" style="margin:0">${c.reason}</p></section>
+    <section><h3>💡 플레이 팁</h3><ul>${c.tips.map(t=>`<li>${t}</li>`).join("")}</ul></section>
+    <section><h3>🔥 스킬 콤보</h3>
+      ${c.combos.map(cb=>`<div class="combo">${cb.map(k=>`<span class="k">${k}</span>`).join("<i>→</i>")}</div>`).join("")}
+      <p class="reason">${c.comboNote}</p>
+    </section>
+    <section><h3>✨ 스킬 설명</h3>
+      ${c.skills.map(s=>`<div class="skill"><div class="key">${s[0]}</div><div><b>${s[1]}</b><p>${s[2]}</p>${s[3]?`<div class="stags">${s[3].map(t=>`<span class="stag ${/기절|속박|띄우|넉백|공포|매혹|변이|침묵|둔화|끌어/.test(t)?"cc":""}">${t}</span>`).join("")}</div>`:""}</div></div>`).join("")}
+    </section>
+    ${patchSection(c)}`;
+  d.querySelector(".back").onclick=back;
+  d.querySelectorAll("[data-go]").forEach(el=>el.onclick=()=>show(el.dataset.go));
+  d.querySelectorAll("[data-n]").forEach(el=>el.onclick=()=>{const c=findByName(el.dataset.n);if(c)show(c.id);});
+  window.scrollTo(0,0);
+}
+function back(){ setTab(document.querySelector(".tab.on").dataset.t); }
+
+/* ===== 바텀 듀오 데이터 =====
+   type: 올인 / 포킹 / 보호 / 전용  */
+const DUOS = [
+ {adc:"자야",sup:"라칸",type:"전용",
+  why:"서로 짝인 챔피언. 라칸의 돌진·띄우기·매혹과 자야의 깃털 속박이 이어지고, 둘 다 기동성이 좋아 진입과 후퇴가 자유롭습니다.",
+  when:["상대 바텀이 이동기가 없고 CC로 묶기 쉬울 때","아군 정글이 갱킹/합류를 잘 해줄 때","한타에서 진입 타이밍을 직접 만들고 싶을 때"],
+  plan:"레벨 2~3에 라칸 E로 붙어 W 띄우기 → 자야 깃털 E로 속박해 킬각을 봅니다.",
+  caution:"하드 CC에 한 명이라도 걸리면 같이 터지기 쉽습니다. 상대에 알리스타·노틸러스처럼 CC가 강한 서포터가 있으면 신중하게."},
+ {adc:"징크스",sup:"세라핀",type:"보호",
+  why:"세라핀의 방패·회복으로 징크스가 살아남고, 세라핀 궁극기 CC로 징크스가 마음껏 딜을 넣습니다. 둘 다 후반 한타가 강합니다.",
+  when:["상대가 포킹/견제가 많아 라인전이 힘들 때","우리 팀에 탱커가 부족해 후반 한타가 중요할 때","아군 정글이 갱킹보다 성장 위주일 때"],
+  plan:"초반은 파밍과 안전한 견제, 킬이 나오면 징크스 '흥분 상태'로 연속 처치를 노립니다.",
+  caution:"둘 다 이동기가 부족해 암살자·강한 인게이지(레오나 등)에 약합니다."},
+ {adc:"징크스",sup:"레오나",type:"올인",
+  why:"레오나가 확실한 CC를 걸면 징크스가 이동기 없이도 안전하게 딜을 쏟아부을 수 있습니다.",
+  when:["상대 원딜이 이동기 없는 챔피언일 때","초반 레벨 2~3 킬각을 노리고 싶을 때","상대 서포터가 CC에 약한 포킹형일 때"],
+  plan:"레벨 2에 레오나 E→Q로 묶고 징크스 W 슬로우 + 평타 집중.",
+  caution:"레오나가 먼저 죽으면 징크스의 안전장치가 사라집니다. 상대 쉴드·넉백 서포터를 조심하세요."},
+ {adc:"애쉬",sup:"레오나",type:"올인",
+  why:"애쉬의 슬로우와 레오나의 스턴이 합쳐져 상대가 도망칠 수 없습니다. 궁극기로 맵 전체 지원도 가능합니다.",
+  when:["상대 원딜의 이동기가 부족할 때","초반 킬을 노리고 정글 갱킹과 맞물릴 때","팀에 이니시가 부족할 때"],
+  plan:"레오나 이니시 후 애쉬 W로 슬로우를 걸어 확실히 킬을 챙기고, 궁극기로 다른 라인도 지원.",
+  caution:"애쉬 체력이 낮아 상대 올인에 약합니다."},
+ {adc:"애쉬",sup:"노틸러스",type:"올인",
+  why:"노틸러스의 갈고리 끌어오기와 애쉬 슬로우로 연속 CC를 줄 수 있고, 애쉬 궁극기로 마무리까지 가능합니다.",
+  when:["상대가 쉴드/넉백 서포터가 아닐 때","시야 장악이 잘 되는 상황","초반 공격적인 라인전을 하고 싶을 때"],
+  plan:"갈고리 → 평타 속박 → 애쉬 W 슬로우로 킬을 완성합니다.",
+  caution:"갈고리가 미니언에 막히면 큰 손해입니다."},
+ {adc:"케이틀린",sup:"레오나",type:"올인",
+  why:"케이틀린의 사거리와 덫, 레오나의 CC가 겹쳐 초반 킬각이 매우 높습니다. 덫에 걸린 적에게 헤드샷도 터집니다.",
+  when:["상대 원딜이 사거리 짧은 챔피언일 때","초반 라인 주도권을 잡고 싶을 때","타워 다이브를 노릴 때"],
+  plan:"덫 위에 레오나가 CC를 걸면 헤드샷+스턴 연계로 확실히 킬을 만듭니다.",
+  caution:"상대에 드레이븐·루시안처럼 공격적인 원딜이 있으면 오히려 말릴 수 있습니다."},
+ {adc:"케이틀린",sup:"세라핀",type:"포킹",
+  why:"긴 사거리 두 명이서 지속 견제로 라인을 밀어붙이고 포탑 압박을 만듭니다.",
+  when:["상대가 근접 서포터/짧은 사거리 원딜일 때","포탑 선취 골드를 노릴 때","아군 정글이 바텀에 합류하기 좋을 때"],
+  plan:"안전하게 견제 → 레벨 우위 → 라인을 푸시해 타워를 압박합니다.",
+  caution:"강한 인게이지(블리츠크랭크 등)에게는 견제만으로는 부족합니다."},
+ {adc:"베인",sup:"알리스타",type:"보호",
+  why:"베인의 약한 초반을 알리스타의 탱킹과 회복으로 보완하고, 베인 E로 벽 스턴이 연결됩니다.",
+  when:["상대에 탱커/체력 높은 챔피언이 많을 때","후반에 한타를 책임질 하이퍼캐리가 필요할 때","상대 조합에 CC가 많아 CC 해제가 필요할 때"],
+  plan:"초반은 알리스타가 앞에서 버티고, 베인은 파밍에 집중. 후반에 W 3스택 폭딜을 노립니다.",
+  caution:"상대 원딜·서포터가 모두 공격적이면 초반에 위험합니다."},
+ {adc:"미스 포츈",sup:"레오나",type:"올인",
+  why:"미스 포츈은 궁극기 시전 중 움직일 수 없어 CC가 꼭 필요한데, 레오나가 한타 진입과 묶기를 도와줍니다.",
+  when:["한타를 중심으로 하는 조합일 때","상대가 모여 있을 때 궁극기를 쓰고 싶을 때","초반 라인전을 가볍게 이기고 싶을 때"],
+  plan:"E로 이동을 막고 레오나 CC 후 궁극기로 한타를 마무리합니다.",
+  caution:"궁극기를 쓰는 동안은 무방비 상태. 상대 암살자를 조심하세요."},
+ {adc:"미스 포츈",sup:"알리스타",type:"올인",
+  why:"알리스타 CC로 상대를 뭉치게 한 뒤 미스 포츈 궁극기를 쏟아붓는 한타 조합입니다.",
+  when:["상대가 뭉쳐 다니는 조합일 때","초반 라인전 안정성이 필요할 때","CC 많은 상대를 만났을 때"],
+  plan:"알리스타 W→Q로 띄운 뒤 평타·Q로 딜. 궁극기로 마무리.",
+  caution:"알리스타가 먼저 CC에 걸리면 연계가 끊깁니다."},
+ {adc:"카이사",sup:"노틸러스",type:"올인",
+  why:"노틸러스가 적을 붙잡으면 카이사가 궁극기로 순식간에 합류해 폭딜을 넣을 수 있습니다.",
+  when:["중반 이후 암살형 한타를 노릴 때","상대에게 CC 방어 스킬이 적을 때","카이사 진화 아이템이 완성됐을 때"],
+  plan:"갈고리로 후방 딜러를 끌어오고 카이사 R로 합류해 순삭합니다.",
+  caution:"갈고리가 빗나가면 카이사가 혼자 위험해집니다."},
+ {adc:"카이사",sup:"라칸",type:"올인",
+  why:"라칸과 카이사 모두 기동성이 좋아 진입과 후퇴가 자유로운 유연한 조합입니다.",
+  when:["상대가 CC를 많이 못 가졌을 때","기동성으로 사이드 압박하고 싶을 때","아군에 스플릿 푸시 챔피언이 있을 때"],
+  plan:"라칸 E로 합류해 W로 띄우고 카이사 평타·스킬 폭딜을 넣습니다.",
+  caution:"하드 CC 지속에 약합니다."},
+ {adc:"진",sup:"세라핀",type:"포킹",
+  why:"진의 W 속박과 세라핀 궁극기 CC가 이어지고, 둘 다 사거리가 길어 안전하게 견제할 수 있습니다.",
+  when:["상대가 이동기가 적어 속박이 잘 맞을 때","후반 한타에서 CC 연계를 하고 싶을 때","안전한 라인전을 원할 때"],
+  plan:"견제하면서 진 W 속박 → 세라핀 E/R로 연결해 킬을 노립니다.",
+  caution:"인게이지에 약합니다. 시야 확보가 중요합니다."},
+ {adc:"진",sup:"노틸러스",type:"올인",
+  why:"노틸러스가 끌어오면 진이 W 속박과 평타로 마무리해 킬을 확정짓는 조합입니다.",
+  when:["상대 원딜이 이동기 없을 때","시야 우위일 때","초반 킬을 노릴 때"],
+  plan:"갈고리 → 진 W 속박 → Q·평타 4번째 총알 마무리.",
+  caution:"재장전 타이밍에 역공을 받지 않도록 하세요."},
+ {adc:"루시안",sup:"노틸러스",type:"올인",
+  why:"루시안의 초반 폭딜과 노틸러스의 CC가 맞물려 초반 올인에 강력한 조합입니다.",
+  when:["상대가 약한 라인전 조합(베인·애쉬 등)일 때","초반 레벨 2 올인을 하고 싶을 때","아군 정글이 스노우볼 중일 때"],
+  plan:"레벨 2에 갈고리 → 루시안 스킬-평타 연계로 킬 확정.",
+  caution:"초반에 이기지 못하면 후반 기여가 약합니다."},
+ {adc:"루시안",sup:"라칸",type:"올인",
+  why:"라칸이 루시안 곁으로 빠르게 합류해 보호막을 주고 이니시도 걸어주며, 루시안 E와 함께 기동 올인이 가능합니다.",
+  when:["상대 바텀이 사거리 짧은 조합일 때","공격적인 라인전을 원할 때","사이드 레인 압박에 같이 움직이고 싶을 때"],
+  plan:"E 이동으로 붙고 라칸 W로 띄운 뒤 루시안 스킬·평타 연계로 킬을 가져갑니다.",
+  caution:"상대에 케이틀린 같은 사거리 긴 원딜이 있으면 접근이 어렵습니다."},
+ {adc:"드레이븐",sup:"레오나",type:"올인",
+  why:"드레이븐의 초반 폭딜과 레오나의 확정 CC로 레벨 2부터 상대를 압도합니다. 킬을 따면 눈덩이가 굴러갑니다.",
+  when:["초반에 라인전 승부를 보고 싶을 때","상대가 약한 서포터/후반 원딜일 때","아군 정글이 갱킹에 능할 때"],
+  plan:"도끼를 계속 받으며 레오나 이니시에 맞춰 폭딜.",
+  caution:"초반에 밀리면 만회하기 어렵습니다. 도끼를 못 잡으면 약해집니다."},
+ {adc:"드레이븐",sup:"알리스타",type:"올인",
+  why:"알리스타의 단단함과 CC로 드레이븐이 공격적으로 도끼를 받으며 딜 교환을 할 수 있습니다.",
+  when:["상대가 포킹 위주일 때","초반 피해 교환을 이기고 싶을 때","지속 전투가 예상될 때"],
+  plan:"알리스타가 앞에서 버티며 WQ로 CC, 드레이븐이 딜을 퍼붓습니다.",
+  caution:"마나 관리가 어렵습니다."},
+ {adc:"사미라",sup:"알리스타",type:"올인",
+  why:"사미라는 스킬을 이어서 써야 궁극기가 열리는데, 알리스타의 CC가 연계를 도와 S등급 달성이 쉬워집니다.",
+  when:["한타에서 연속 진입이 가능할 때","상대가 투사체 의존형일 때(W로 방어)","교전을 자주 열고 싶을 때"],
+  plan:"알리스타 WQ로 띄운 뒤 사미라가 돌진해 스킬 콤보 → 궁극기.",
+  caution:"둘 다 접근해야 하므로 거리 관리가 중요합니다."},
+ {adc:"사미라",sup:"레오나",type:"올인",
+  why:"레오나의 단단함과 CC가 사미라의 진입을 안전하게 만들어주고, 둘 다 적에게 붙는 스타일이라 호흡이 좋습니다.",
+  when:["상대가 원거리 포킹 서포터가 없을 때","초반 올인으로 이득을 보고 싶을 때","타워 다이브를 노릴 때"],
+  plan:"레오나 E 진입 → Q 스턴 → 사미라 E·Q·W 연계로 킬.",
+  caution:"쉴드/넉백 서포터에게 이니시가 막힐 수 있습니다."},
+ {adc:"이즈리얼",sup:"세라핀",type:"포킹",
+  why:"이즈리얼의 안정적인 Q 견제와 세라핀 포킹이 합쳐져 느리지만 확실하게 라인을 가져갑니다.",
+  when:["상대가 이니시/인게이지 약한 조합일 때","안전하게 스케일링하고 싶을 때","아군에 탱커·이니시가 있을 때"],
+  plan:"Q로 견제하며 CS와 마나 관리, 안정적으로 아이템 완성을 노립니다.",
+  caution:"레오나 같은 강한 인게이지 서포터에게는 취약합니다."}
+,
+ {adc:"징크스",sup:"룰루",type:"보호",
+  why:"룰루의 W(공격·이동 속도), E(방어막), R(띄우기+체력 증가)로 징크스가 살아남고, 징크스 '흥분 상태'와 겹쳐 후반 한타에서 폭발적인 딜을 냅니다.",
+  when:["상대에 인게이지/암살 위협이 있어 징크스를 확실히 지켜야 할 때","후반 한타가 중요한 팀 조합일 때","상대 돌진형 챔피언을 W 변이로 끊고 싶을 때"],
+  plan:"초반은 룰루 Q·Pix로 견제하며 안전하게, 중반 이후 징크스를 지키며 킬/어시를 쌓아 '흥분 상태'를 노립니다.",
+  caution:"초반 올인에 둘 다 약해질 수 있고, 룰루가 먼저 잡히면 징크스의 안전장치가 사라집니다."},
+ {adc:"유나라",sup:"룰루",type:"보호",
+  why:"룰루가 방어막·거대화로 유나라를 지키며 시간을 벌어주고, 유나라는 Q 해방과 초월 상태로 딜을 쏟아내는 보호형 조합입니다. 공개 정보에서 유나라의 대표적인 서포터로 자주 언급됩니다.",
+  when:["안전하게 후반 하이퍼캐리를 노릴 때","상대 조합이 CC·돌진이 많아 유나라 보호가 중요할 때","교전을 길게 끌며 딜을 넣고 싶을 때"],
+  plan:"초반엔 룰루 보호막으로 버티며 파밍하고, 아이템이 쌓이면 룰루 W·R로 지키며 한타에서 승부합니다.",
+  caution:"룰루가 사거리에서 밀리면 라인전이 어려워집니다. 승률 데이터는 표본이 적어 참고용입니다."},
+ {adc:"유나라",sup:"세라핀",type:"보호",
+  why:"세라핀의 방패·회복과 광역 CC가 후반형 원딜 유나라를 안전하게 지켜 줍니다.",
+  when:["안전하게 스케일링하고 싶을 때","상대 포킹이 심할 때","한타에서 CC 연계를 쓰고 싶을 때"],
+  plan:"초반엔 세라핀 방패로 라인을 버티며 파밍, 후반 한타에서 세라핀 R과 유나라 딜을 연계합니다.",
+  caution:"둘 다 이동기가 부족하므로 인게이지/암살자에 취약합니다."},
+ {adc:"베인",sup:"룰루",type:"보호",
+  why:"룰루의 방어막·변이·R 띄우기로 약한 초반을 버티게 도와주고, 베인이 후반에 탱커까지 녹이는 보호형 조합입니다.",
+  when:["상대에 암살자/돌진형이 있어 베인 보호가 필요할 때","후반 하이퍼캐리가 필요할 때","초반 압박을 룰루 W로 끊고 싶을 때"],
+  plan:"초반은 룰루가 견제와 변이로 라인을 지켜주고, 베인은 파밍하며 아이템을 완성합니다.",
+  caution:"사거리 긴 원딜/포킹 서포터에게는 초반 압박을 받을 수 있습니다."}
+];
+const SITUATIONS = [
+ {t:"상대 바텀이 포킹 위주일 때",d:"체력을 깎이며 싸우면 불리하므로 회복·보호가 되는 조합이나 사거리 긴 조합.",picks:["징크스+세라핀","케이틀린+세라핀","베인+알리스타","징크스+룰루"]},
+ {t:"상대가 인게이지(레오나·노틸러스 등)일 때",d:"잡히면 끝나므로 기동성이나 방패가 있는 조합.",picks:["자야+라칸","징크스+세라핀","사미라+알리스타","징크스+룰루"]},
+ {t:"상대 원딜이 이동기가 없을 때",d:"CC만 맞추면 킬이 나오므로 올인형 조합.",picks:["애쉬+레오나","케이틀린+레오나","진+노틸러스"]},
+ {t:"초반에 킬을 따고 눈덩이를 굴리고 싶을 때",d:"레벨 2~3 올인 킬각을 만드는 조합. 정글 합류도 필요.",picks:["드레이븐+레오나","루시안+노틸러스","징크스+레오나"]},
+ {t:"후반 한타를 책임질 하이퍼캐리가 필요할 때",d:"초반을 버티고 후반에 폭딜. 탱커·보호형 서포터와.",picks:["베인+알리스타","징크스+세라핀","이즈리얼+세라핀","징크스+룰루","유나라+룰루"]},
+ {t:"우리 정글이 갱킹을 잘 올 때 (세주아니·녹턴 등)",d:"CC가 많은 서포터와 같이 킬을 확정짓기 좋습니다.",picks:["미스 포츈+레오나","카이사+노틸러스","애쉬+노틸러스"]},
+ {t:"상대 CC가 많아 걸리면 위험할 때",d:"CC를 풀어주거나 방어해주는 조합.",picks:["베인+알리스타","미스 포츈+알리스타","자야+라칸","징크스+룰루"]},
+ {t:"한타 중심으로 풀어가는 조합일 때",d:"궁극기와 CC를 연계해 한타에서 승부.",picks:["미스 포츈+레오나","미스 포츈+알리스타","진+세라핀"]}
+];
+
+/* ===== 상대 조합 대응 =====
+   상대 서포터/원딜 유형을 고르면, 우리 듀오 중 상성이 좋은 조합과 피할 조합을 보여줍니다.
+   good/bad 의 키는 "원딜+서포터" 이며 DUOS 에 있는 조합이어야 합니다. */
+const ENEMY_SUP = [
+ {id:"s1",label:"인게이지형",ex:"레오나·노틸러스·알리스타·블리츠크랭크·파이크",
+  good:{"자야+라칸":"둘 다 기동성이 좋아 붙잡히기 전에 빠지거나 역으로 진입할 수 있습니다.",
+        "징크스+세라핀":"세라핀 방패와 궁극기 CC로 이니시를 받아내고 한타에서 되갚을 수 있습니다.",
+        "사미라+알리스타":"사미라 W로 투사체를 막고, 알리스타 R로 CC를 풀고 맞붙을 수 있습니다.",
+        "베인+알리스타":"알리스타가 탱킹하고 CC를 풀어주며, 베인은 후반을 노립니다.",
+        "징크스+룰루":"룰루 E 방어막과 W 변이·R 띄우기로 이니시를 받아내고 징크스를 지킵니다.",
+        "유나라+룰루":"룰루가 방어막과 변이로 이니시를 끊고 유나라가 안전하게 딜을 넣습니다."},
+  bad:{"케이틀린+세라핀":"포킹 위주라 붙잡히면 이동기가 없어 위험합니다.",
+       "진+세라핀":"진과 세라핀 모두 이동기가 부족해 이니시에 취약합니다.",
+       "이즈리얼+세라핀":"견제만 하다가 인게이지에 당하기 쉽습니다."}},
+ {id:"s2",label:"포킹·메이지형",ex:"럭스·제라스·브랜드·카르마·벨코즈",
+  good:{"징크스+레오나":"체력이 약한 메이지 서포터를 레오나가 붙잡아 한 번에 처치합니다.",
+        "케이틀린+레오나":"사거리 우위에 덫과 CC가 겹쳐 포킹을 막고 킬각을 만듭니다.",
+        "드레이븐+레오나":"레벨 2에 올인으로 포킹 서포터를 처치해 라인을 장악합니다.",
+        "루시안+노틸러스":"갈고리로 끌어와 초반 올인으로 처치하기 좋습니다.",
+        "징크스+세라핀":"세라핀 방패/회복으로 포킹 피해를 상쇄하고 후반에 이깁니다.",
+        "징크스+룰루":"룰루 Q와 Pix로 맞견제하고 E 방어막으로 포킹을 받아냅니다."},
+  bad:{"베인+알리스타":"사거리가 짧고 초반이 약해 포킹에 계속 체력을 깎입니다.",
+       "미스 포츈+알리스타":"둘 다 사거리가 짧아 견제를 일방적으로 맞기 쉽습니다."}},
+ {id:"s3",label:"인챈터·보호형",ex:"나미·룰루·잔나·소라카·모르가나·유미",
+  good:{"드레이븐+레오나":"인챈터는 초반이 약해 레벨 2 올인으로 확실히 이득을 봅니다.",
+        "루시안+노틸러스":"초반 올인으로 인챈터의 방어막이 완성되기 전에 처치합니다.",
+        "케이틀린+레오나":"사거리 압박과 CC로 인챈터 서포터를 압박합니다."},
+  bad:{"진+세라핀":"견제를 해도 상대 방패/회복으로 상쇄되어 이득이 적습니다.",
+       "이즈리얼+세라핀":"견제 효율이 떨어져 라인전이 길어집니다."}}
+];
+const ENEMY_ADC = [
+ {id:"a1",label:"초반 공격형",ex:"드레이븐·루시안·칼리스타·사미라",
+  good:{"베인+알리스타":"알리스타가 앞에서 버텨주고 베인은 후반에 이깁니다.",
+        "자야+라칸":"기동성과 보호로 초반 올인을 피하고 역습할 수 있습니다.",
+        "징크스+세라핀":"세라핀 방패로 초반을 버티고 후반 한타에서 이깁니다.",
+        "드레이븐+레오나":"같은 공격형으로 맞불 올인을 걸어 레벨 2 주도권을 노립니다.",
+        "미스 포츈+알리스타":"단단한 서포터와 함께 초반을 버티고 한타로 승부합니다.",
+        "징크스+룰루":"룰루 방어막과 W 변이로 초반 올인을 막고 후반에 이깁니다.",
+        "유나라+룰루":"방어막과 변이로 초반을 버티고 후반 유나라 딜로 승부합니다."},
+  bad:{"진+세라핀":"이동기가 없어 초반 올인에 취약합니다.",
+       "이즈리얼+세라핀":"사거리 견제만으로는 초반 압박을 막기 어렵습니다."}},
+ {id:"a2",label:"안정·포킹형",ex:"케이틀린·이즈리얼·진·애쉬·제리",
+  good:{"징크스+레오나":"사거리 우위 상대를 레오나가 붙잡아 징크스가 딜을 넣습니다.",
+        "사미라+레오나":"CC로 붙잡고 사미라 연계로 킬을 만들기 좋습니다.",
+        "루시안+노틸러스":"갈고리로 끌어오면 사거리 차이를 무력화합니다.",
+        "드레이븐+레오나":"초반 올인으로 사거리 우위를 무시하고 압박합니다."},
+  bad:{"베인+알리스타":"사거리가 짧아 견제를 일방적으로 맞기 쉽습니다."}},
+ {id:"a3",label:"후반 캐리형",ex:"징크스·베인·카이사·시비르·코그모",
+  good:{"드레이븐+레오나":"초반에 눌러 후반 전에 승부를 보기 좋습니다.",
+        "루시안+노틸러스":"초반 올인으로 후반형 원딜이 성장하기 전에 압박합니다.",
+        "케이틀린+레오나":"초반 라인 주도권을 잡고 타워를 빠르게 깰 수 있습니다.",
+        "사미라+알리스타":"초반~중반 교전에서 주도권을 가져갑니다."},
+  bad:{"징크스+세라핀":"둘 다 후반형이라 초반 이득을 못 보면 앞서가기 어렵습니다.",
+       "베인+알리스타":"둘 다 후반형이라 초반 압박이 약합니다."}},
+ {id:"a4",label:"이동기·돌진형",ex:"루시안·사미라·트리스타나·카이사·이즈리얼",
+  good:{"애쉬+레오나":"슬로우와 스턴이 이어져 이동기 있는 원딜도 도망가기 어렵습니다.",
+        "애쉬+노틸러스":"갈고리와 슬로우로 이동기를 쓰기 전에 묶을 수 있습니다.",
+        "진+노틸러스":"갈고리와 속박으로 연속 CC를 줍니다.",
+        "케이틀린+레오나":"덫과 CC로 접근을 막고 진입하는 순간 반격합니다.",
+        "징크스+룰루":"W 변이로 돌진하는 적을 무력화하고 R 띄우기로 접근을 끊습니다."},
+  bad:{"케이틀린+세라핀":"이동기가 있는 상대에게 견제가 잘 맞지 않습니다."}}
+];
+let enemySup=null, enemyAdc=null;
+function renderDuo(){
+  const sup = ENEMY_SUP.find(x=>x.id===enemySup), adc = ENEMY_ADC.find(x=>x.id===enemyAdc);
+  const opts = (arr,cur,key)=>arr.map(o=>`<button class="eopt ${o.id===cur?'on':''}" data-k="${key}" data-id="${o.id}">${o.label}<small>${o.ex}</small></button>`).join("");
+  const score = {};
+  [[sup,"서포터"],[adc,"원딜"]].forEach(([cat,who])=>{ if(!cat) return;
+    Object.entries(cat.good).forEach(([k,r])=>{ (score[k]=score[k]||{v:0,g:[],b:[]}).v+=2; score[k].g.push([`상대 ${who} ${cat.label}`,r]); });
+    Object.entries(cat.bad).forEach(([k,r])=>{ (score[k]=score[k]||{v:0,g:[],b:[]}).v-=2; score[k].b.push([`상대 ${who} ${cat.label}`,r]); });
+  });
+  const find = k=>DUOS.find(d=>d.adc+"+"+d.sup===k);
+  const goods = Object.entries(score).filter(e=>e[1].v>0).sort((x,y)=>y[1].v-x[1].v);
+  const bads = Object.entries(score).filter(e=>e[1].v<0).sort((x,y)=>x[1].v-y[1].v);
+  const card = ([k,o],cls)=>{ const d=find(k); if(!d) return "";
+    const badge = cls==="good" ? (o.v>=4?`<span class="rb s">강력 추천</span>`:`<span class="rb m">추천</span>`) : `<span class="rb x">비추천</span>`;
+    const lines = (cls==="good"?o.g:o.b).map(([w,r])=>`<li><b>${w}</b> — ${r}</li>`).join("");
+    return `<div class="res ${cls}"><h4><a data-n="${d.adc}">${d.adc}</a> + <a data-n="${d.sup}">${d.sup}</a>${badge}</h4><ul>${lines}</ul>${cls==="good"?`<p class="plan">📋 ${d.plan}</p>`:""}</div>`; };
+  let result;
+  if(!sup && !adc) result = `<div class="empty">위에서 상대 조합 유형을 선택하면 추천 듀오가 나타납니다.</div>`;
+  else result = `
+    <h2 class="sec">✅ 이 조합을 뽑으세요${goods.length?`<small style="color:var(--mute);font-size:.8rem"> (${goods.length}개)</small>`:""}</h2>
+    ${goods.length?goods.map(e=>card(e,"good")).join(""):`<div class="empty">뚜렷한 추천 조합이 없습니다. 유형을 바꿔 보세요.</div>`}
+    ${bads.length?`<h2 class="sec">⛔ 피하는 게 좋은 조합</h2>${bads.map(e=>card(e,"bad")).join("")}`:""}`;
+  $("#duo").innerHTML = `
+    <h2 class="sec" style="margin-top:6px">🎯 상대 바텀 조합을 선택하세요</h2>
+    <p class="ehelp">상대 서포터와 원딜 유형을 고르면 우리 듀오 중 어떤 조합이 유리한지 보여줍니다. 둘 다 고르면 두 조건을 합쳐 계산합니다. (다시 누르면 해제)</p>
+    <div class="egroup"><h3>상대 서포터</h3><div class="eopts">${opts(ENEMY_SUP,enemySup,"sup")}</div></div>
+    <div class="egroup"><h3>상대 원딜</h3><div class="eopts">${opts(ENEMY_ADC,enemyAdc,"adc")}</div></div>
+    ${result}
+    <h2 class="sec">📌 상황별 추천 조합</h2>
+    ${SITUATIONS.map(x=>`<div class="sit"><b>${x.t}</b><p>${x.d}</p>${x.picks.map(p=>`<span class="pick">${p}</span>`).join("")}</div>`).join("")}`;
+  $("#duo").querySelectorAll(".eopt").forEach(b=>b.onclick=()=>{
+    if(b.dataset.k==="sup") enemySup = enemySup===b.dataset.id?null:b.dataset.id;
+    else enemyAdc = enemyAdc===b.dataset.id?null:b.dataset.id;
+    renderDuo();});
+  $("#duo").querySelectorAll("[data-n]").forEach(a=>a.onclick=()=>{const c=findByName(a.dataset.n);if(c)show(c.id);});
+}
+/* 챔피언 상세: 이 챔피언과 시너지 나는 바텀 듀오 */
+function synergySection(c){
+  const list = DUOS.filter(d=>d.adc===c.name||d.sup===c.name);
+  if(!list.length) return "";
+  return `<section class="syn"><h3>🤝 시너지 바텀 듀오 <small style="color:var(--mute);font-weight:normal">(${list.length}개)</small></h3>
+    <div class="duo-grid">${list.map(d=>`
+      <div class="duo">
+        <h3><a data-n="${d.adc}">${d.adc}</a><span>+</span><a data-n="${d.sup}">${d.sup}</a></h3>
+        <span class="ttag t-${d.type}">${d.type}형</span>
+        <dl>
+          <dt>💞 시너지</dt><dd>${d.why}</dd>
+          <dt>🎯 이럴 때 꺼내세요</dt><dd><ul>${d.when.map(w=>`<li>${w}</li>`).join("")}</ul></dd>
+          <dt>📋 라인전 플랜</dt><dd>${d.plan}</dd>
+          <dt>⚠ 주의</dt><dd>${d.caution}</dd>
+        </dl>
+      </div>`).join("")}</div></section>`;
+}
+
+/* ===== 패치 반영 (기준: 26.22, 2026-11-03 / 확인 범위 26.18~26.22) =====
+   type: buff / nerf / adj(조정) / fix(버그 수정)
+   출처: 패치 노트 요약 사이트. 정확한 수치는 공식 패치 노트로 확인하세요. */
+const PATCH_BASE = "26.22 (2026-11-03)";
+const TYPE_LABEL = {buff:"▲ 상향",nerf:"▼ 하향",adj:"◆ 조정",fix:"🔧 수정"};
+const PATCHES = {
+ jinx:[["26.21","nerf","기본 체력 630→610, 공격력 성장 3.25→3"]],
+ ashe:[["26.20","nerf","공격력 성장 3.5→3 (효율 높은 유틸 원딜로 평가되어 하향)"]],
+ caitlyn:[["26.21","adj","헤드샷 공격력 비율과 치명타 확률 비율 하향, 대신 Q(피스메이커) 기본 피해 상향"]],
+ vayne:[["26.20","adj","기본 체력 재생 상향(성장은 하향), 구르기 마나 소모를 30으로 고정"]],
+ missfortune:[["26.21","buff","E(총알 세례) 기본 피해 상향, R(총알 시간) 치명타 피해 130%→145%"]],
+ lucian:[["26.20","buff","공격력 성장 2.5→2.9"],["26.19","adj","패시브 관련 기본 피해·계수 하향, Q(꿰뚫는 빛) 기본 피해 상향"]],
+ draven:[["26.19","buff","기본 공격력 62→64"]],
+ yunara:[["26.20","nerf","Q 패시브·액티브 기본 피해 하향, W 둔화가 다른 둔화와 중첩되지 않도록 변경"],["26.16","adj","기본 마법 저항 조정"]],
+ aurora:[["26.22","fix","궁극기가 사미라 W에 막히던 버그 수정"],["26.19","buff","E(The Weirding) 기본 피해 상향, 궁극기 균열 지속시간 상향(버프 지속은 소폭 하향)"]],
+ taliyah:[["26.21","buff","E(풀려난 대지) 기본 피해와 AP 계수 상향"],["26.19","fix","W 지형 판정 버그 수정"]],
+ nocturne:[["26.19","nerf","R(편집증) 쿨타임 증가"]],
+ maokai:[["26.22","buff","Q(가시 부수기) 최대 체력 비례 피해 상향"]],
+ seraphine:[["26.18","nerf","E(비트 드롭) 쿨타임을 11초로 고정(랭크 증가 시 감소 제거)"]],
+ nautilus:[["26.18","nerf","기본 공격력 하향, Q(닻 끌기) 기본 피해 하향"]]
+};
+const SYSTEM_PATCHES = [
+ {p:"26.22",t:"nerf",n:"Doran's Bow(도란의 활)",x:"공격력 8→7"},
+ {p:"26.21",t:"nerf",n:"Gluttonous Greaves",x:"가격 1000→1100 (조합 비용 700→800). 원딜이 과하게 잘 쓴다고 평가됨"},
+ {p:"26.21",t:"nerf",n:"Hubris",x:"근접/원거리 분리. 원거리는 기본 보너스 피해 12→10, 중첩당 AD 3→2로 약화"},
+ {p:"26.21",t:"buff",n:"Infinity Edge(무한의 대검)",x:"치명타 피해 보너스 9%→13.5% (치명타 확률 비율은 0~30%→0~24%)"},
+ {p:"26.21",t:"buff",n:"Dawncore",x:"인챈터 아이템. 기본 마나 재생 비례 AP 10→15 (룰루 등 인챈터 서포터에 유리)"},
+ {p:"26.20",t:"nerf",n:"Runaan's Hurricane",x:"Wind's Fury AD 비율 65%→60%"},
+ {p:"26.20",t:"nerf",n:"Experimental Hexplate",x:"원거리 챔피언 기준 공격 속도 35%→25%, 이동 속도 14%→10%"}
+];
+function patchBadge(c){
+  const e = PATCHES[c.id]; if(!e) return "";
+  return `<div><span class="pt ${e[0][1]}" title="${e[0][2]}">${e[0][0]} ${TYPE_LABEL[e[0][1]]}</span></div>`;
+}
+function patchSection(c){
+  const e = PATCHES[c.id];
+  const body = e ? e.map(x=>`<div class="prow2"><span class="pv">${x[0]}</span><div><span class="pt ${x[1]}">${TYPE_LABEL[x[1]]}</span><p>${x[2]}</p></div></div>`).join("")
+    : `<p class="reason" style="margin:0">최근 패치(26.18~26.22)에서 이 챔피언의 변경 내역은 확인되지 않았습니다.</p>`;
+  return `<section><h3>🛠 최근 패치 반영 <small style="color:var(--mute);font-weight:normal">(기준 ${PATCH_BASE})</small></h3>${body}</section>`;
+}
+
+/* ===== 상대 서포터 주의 =====
+   id:[["상대 서포터","이유"], ...]  (이 챔피언 기준으로 피해야 할 상대 서포터)
+   SUP_TYPE 은 상대 서포터 유형(ENEMY_SUP.id)으로, 대응 듀오 추천에 사용됩니다. */
+const SUP_TYPE = {"레오나":"s1","노틸러스":"s1","알리스타":"s1","블리츠크랭크":"s1","파이크":"s1","쓰레쉬":"s1",
+  "제라스":"s2","럭스":"s2","카르마":"s2","브랜드":"s2","모르가나":"s3","브라움":"s3","룰루":"s3","잔나":"s3"};
+const SUP_AVOID = {
+ jinx:[["레오나","이동기가 없어 스턴에 한 번 걸리면 바로 죽습니다."],["블리츠크랭크","그랩으로 끌려오면 도망갈 방법이 없습니다."],["파이크","갈고리 후 처형으로 순식간에 잡힙니다."],["쓰레쉬","갈고리와 상자로 위치를 잡아 이동기 없는 징크스를 노립니다."]],
+ ashe:[["레오나","체력이 낮고 이동기가 없어 인게이지에 취약합니다."],["블리츠크랭크","그랩 한 번에 라인전 주도권이 넘어갑니다."],["파이크","갈고리 이후 올인에 매우 취약합니다."]],
+ ezreal:[["레오나","E를 쓴 뒤 쿨타임 동안 붙잡히면 위험합니다."],["블리츠크랭크","그랩이 Q 견제를 끊고 올인을 만듭니다."],["제라스","같은 포킹 구도에서 사거리와 CC로 밀릴 수 있습니다."]],
+ caitlyn:[["노틸러스","갈고리 사거리가 길어 케이틀린의 사거리 우위를 무력화합니다."],["블리츠크랭크","그랩으로 사거리 압박이 깨집니다."],["알리스타","WQ 올인에 붙잡히면 피해가 큽니다."]],
+ vayne:[["레오나","초반이 약한 베인이 올인에 쉽게 당합니다."],["노틸러스","갈고리·속박으로 초반에 압박당합니다."],["제라스","긴 사거리 포킹에 베인이 체력을 깎입니다."],["카르마","포킹과 속박으로 초반 라인이 힘들어집니다."]],
+ missfortune:[["블리츠크랭크","이동기가 없어 그랩에 잡히면 끝입니다."],["레오나","CC에 걸리면 딜을 못 넣고 죽습니다."],["쓰레쉬","갈고리와 상자로 이동을 막힙니다."]],
+ kaisa:[["레오나","CC 연계에 걸리면 R 도약 전에 잡힙니다."],["노틸러스","갈고리로 끌려오면 위험합니다."],["블리츠크랭크","그랩으로 카이사를 끌어와 잡습니다."]],
+ jhin:[["블리츠크랭크","이동기가 없고 재장전이 있어 그랩에 취약합니다."],["노틸러스","갈고리 후 연속 CC에 죽기 쉽습니다."],["레오나","스턴에 걸리면 반격하기 어렵습니다."]],
+ lucian:[["브라움","방패 벽에 스킬·평타가 막히고 올인이 실패합니다."],["모르가나","검은 방패로 CC가 막혀 올인이 실패합니다."],["알리스타","초반 올인에 알리스타가 단단하게 버팁니다."],["노틸러스","올인이 어렵고 오히려 갈고리에 당합니다."]],
+ draven:[["모르가나","검은 방패로 E와 CC 연계가 막힙니다."],["브라움","방패 벽으로 도끼와 평타가 막힙니다."],["알리스타","단단해서 초반 올인이 실패하기 쉽습니다."],["룰루","변이(W)로 폭딜 올인을 끊습니다."]],
+ xayah:[["모르가나","E 깃털 속박이 검은 방패에 막힙니다."],["알리스타","R로 CC를 풀고 반격할 수 있습니다."],["노틸러스","갈고리·속박으로 자야가 묶입니다."],["블리츠크랭크","그랩으로 라칸과 분리되면 위험합니다."]],
+ samira:[["모르가나","스킬 연계가 검은 방패에 막힙니다."],["브라움","방패 벽에 평타가 막히고 접근이 어렵습니다."],["알리스타","돌진 후 반격에 당하기 쉽습니다."]],
+ yunara:[["레오나","체력이 낮고 CC에 취약합니다."],["노틸러스","갈고리 연계에 위험합니다."],["블리츠크랭크","그랩에 걸리면 라인전이 불리합니다."],["파이크","갈고리 이후 올인에 취약합니다."]],
+ seraphine:[["블리츠크랭크","이동기가 부족해 그랩에 쉽게 잡힙니다."],["노틸러스","갈고리 연계에 위험합니다."],["파이크","갈고리 후 처형으로 서포터를 노립니다."],["쓰레쉬","갈고리와 상자로 이동을 막힙니다."]],
+ rakan:[["모르가나","검은 방패로 W와 R CC가 무효가 됩니다."],["브라움","방패와 CC로 라칸의 진입을 막습니다."],["카르마","포킹과 속박으로 라칸을 압박합니다."]],
+ alistar:[["제라스","긴 사거리 포킹에 알리스타가 접근하지 못합니다."],["럭스","속박과 포킹으로 접근을 막습니다."],["카르마","포킹과 속박으로 라인전이 힘들어집니다."],["브랜드","지속 포킹에 체력과 마나를 소모합니다."]],
+ leona:[["모르가나","검은 방패로 스턴과 CC가 무효가 됩니다."],["브라움","방패 벽과 기절로 이니시가 막힙니다."],["잔나","넉백과 R로 이니시를 끊습니다."],["룰루","변이로 돌진하는 레오나를 무력화합니다."]],
+ nautilus:[["모르가나","검은 방패로 갈고리 CC가 막힙니다."],["브라움","방패 벽에 갈고리가 막힙니다."],["잔나","넉백으로 이니시를 끊습니다."],["룰루","변이로 올인을 무력화합니다."]],
+ lulu:[["레오나","초반 올인에 룰루가 압박당하기 쉽습니다."],["노틸러스","갈고리에 잡히면 아군 보호가 어렵습니다."],["블리츠크랭크","그랩으로 룰루를 끌어와 라인전에서 이득을 봅니다."],["파이크","갈고리 이후 처형으로 서포터를 노립니다."]]
+};
+function supAvoidSection(c){
+  const list = SUP_AVOID[c.id]; if(!list) return "";
+  const duosFor = type=>{
+    const cat = ENEMY_SUP.find(x=>x.id===type); if(!cat) return [];
+    return Object.keys(cat.good).filter(k=>k.split("+").includes(c.name)).slice(0,3);
+  };
+  const items = list.map(([n,r])=>{
+    const type = SUP_TYPE[n]; const cat = ENEMY_SUP.find(x=>x.id===type);
+    const d = type ? duosFor(type) : [];
+    // 서포터 챔피언 본인 기준일 때는 자기 이름이 들어간 듀오가 나오므로 파트너 표시를 생략
+    return `<div class="avi"><b>${n}</b>${cat?`<span class="tp">${cat.label}</span>`:""}<p>${r}</p>${d.length?`<div class="vs">💡 이럴 땐: ${d.join(" / ")}</div>`:""}</div>`;
+  }).join("");
+  return `<section class="avd"><h3>🚫 이 상대 서포터가 나오면 조심하세요</h3>
+    <p class="sub">${c.name} 기준으로 피해야 하거나 라인전이 어려운 상대 서포터입니다.</p>${items}</section>`;
+}
+function renderPatch(){
+  const roles = ["원딜","미드","정글","서포터"];
+  const groups = roles.map(r=>{
+    const rows = CHAMPIONS.filter(c=>c.role===r && PATCHES[c.id]).flatMap(c=>PATCHES[c.id].map(x=>({c,x})))
+      .sort((a,b)=>b.x[0].localeCompare(a.x[0]));
+    if(!rows.length) return "";
+    return `<h2 class="sec">${r}</h2><section>${rows.map(({c,x})=>`<div class="prow2"><span class="pv">${x[0]}</span><div><b><a data-n="${c.name}" style="color:var(--gold);cursor:pointer">${c.name}</a></b> <span class="pt ${x[1]}">${TYPE_LABEL[x[1]]}</span><p>${x[2]}</p></div></div>`).join("")}</section>`;
+  }).join("");
+  const none = CHAMPIONS.filter(c=>!PATCHES[c.id]).map(c=>c.name).join(", ");
+  $("#patch").innerHTML = `
+    <div class="pbase"><b>기준 패치 ${PATCH_BASE}</b> · 26.18~26.22 변경 내역을 반영했습니다. 룰루는 마지막 변경이 25.16입니다. 수치는 패치 노트 요약에서 가져온 것이므로 정확한 값은 공식 패치 노트로 확인하세요.</div>
+    <h2 class="sec" style="margin-top:6px">🛠 챔피언 변경</h2>
+    ${groups}
+    <h2 class="sec">🧰 원딜·서포터 관련 아이템/시스템 변경</h2>
+    <section>${SYSTEM_PATCHES.map(x=>`<div class="prow2"><span class="pv">${x.p}</span><div><b>${x.n}</b> <span class="pt ${x.t}">${TYPE_LABEL[x.t]}</span><p>${x.x}</p></div></div>`).join("")}</section>
+    <h2 class="sec">변경 없음 (26.18~26.22)</h2>
+    <p class="reason">${none}</p>`;
+  $("#patch").querySelectorAll("[data-n]").forEach(a=>a.onclick=()=>{const c=findByName(a.dataset.n);if(c)show(c.id);});
+}
+function setTab(t){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $("#detail").style.display="none";
+  ["list","duo","patch"].forEach(n=>$("#"+n).style.display = n===t ? "block" : "none");
+  if(t==="duo") renderDuo();
+  if(t==="patch") renderPatch();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+
+$("#q").addEventListener("input", renderGrid);
+renderRoles(); renderGrid();
+</script>
+</body>
+</html>
